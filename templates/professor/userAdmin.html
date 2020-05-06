@@ -1,0 +1,217 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+
+    <link rel="stylesheet" href="{% static 'professorTable/css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'professorTable/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'userAdmin/css/bootstrap.min.css' %}">
+    {#    <link href="{% static 'userAdmin/css/bootstrap-editable.css' %}" rel="stylesheet" type="text/css" />#}
+    <link rel="stylesheet" href="{% static 'professorTable/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'userAdmin/css/bootstrap-editable.css' %}">
+    <link rel="stylesheet" href="{% static 'professorTable/css/bootstrap-table.min.css' %}">
+    <script src="{% static 'professorTable/js/jquery.js' %}"></script>
+    <script src="{% static 'professorTable/js/popper.min.js' %}"></script>
+    <script src="{% static 'userAdmin/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'userAdmin/js/bootstrap-editable.js' %}"></script>
+    <script src="{% static 'professorTable/js/bootstrap-table.js' %}"></script>
+    <script src="{% static 'professorTable/js/bootstrap-table-zh-CN.js' %}"></script>
+    <script src="{% static 'professorTable/js/bootstrap-table-editable.js' %}"></script>
+
+</head>
+
+<body>
+<div style="width: 95%;margin:0 auto;">
+    <div id="toolbar" class="btn-group">
+        <button id="AddButton" type="button" class="btn btn-primary" onclick="createUser();"
+                style="margin-right: 5px;">添加
+        </button>
+    </div>
+    <table id="userAdmin" style="background-color: white" class="table table-hover table-striped table-bordered"
+           width="100%">
+        <thead class="thead-light small" align="center" valign="center">
+        </thead>
+    </table>
+</div>
+
+
+<script>
+    $(function () {
+        $("#userAdmin").bootstrapTable({
+            toolbar: "#toolbar",
+            idField: "ID",
+            method: 'post',
+            pagination: true,
+            showRefresh: true,
+            showColumns: true,
+            search: true,
+            searchAlign: 'left',
+            clickToSelect: true,
+            queryParams: function (param) {
+                return {};
+            },
+            url: "userData/",
+            columns: [
+                {
+                    field: 'ID',
+                    title: '编号',
+                    align: 'center',
+                    valign: 'center',
+                }
+                , {
+                    field: "username",
+                    title: "账户",
+                    align: 'center',
+                    valign: 'center',
+                    editable: {
+                        type: 'text',
+                        title: '账户',
+                        validate: function (v) {
+                            if (!v) return '账户名不能为空';
+                            else if (v.length > 10) {
+                                return '账户名太长！'
+                            }
+                        }
+                    }
+                }, {
+                    field: "pwd",
+                    title: "密码",
+                    visible: false,
+                    align: 'center',
+                    valign: 'center',
+                    editable: {
+                        type: 'text',
+                        title: '密码',
+                        validate: function (v) {
+                            if (!v) return '密码不能为空';
+                            else if (v.length > 16) {
+                                return '密码太长！';
+                            }
+                        }
+                    }
+                },
+                {
+                    field: "addusername",
+                    title: "添加人",
+                    align: 'center',
+                    valign: 'center',
+                },
+                {
+                    field: "adduserid",
+                    title: "添加人编号",
+                    align: 'center',
+                    valign: 'center',
+                    visible: "false",
+                },
+                {
+                    field: "cx",
+                    title: "身份",
+                    mode: "inline",
+                    align: 'center',
+                    valign: 'center',
+                    editable: {
+                        type: 'select',
+                        title: '身份',
+                        source: [{value: "1", text: "管理员"}, {value: "2", text: "用户"}]
+                    }
+                },
+                {
+                    field: "addtime",
+                    title: "添加时间",
+                    align: 'center',
+                    valign: 'center',
+                    formatter: function (value, row, index) {
+                        //var date = eval('new ' + eval(value).source);
+                        //return date.format("yyyy-MM-dd");
+                        return value;
+                    }
+                },
+                {
+                    title: "操作",
+                    align: 'center',
+                    valign: 'center',
+                    formatter: function (value, row, index) {
+                        var html = '<button id = "' + row.ID + '" class = "btn btn-primary" onclick="userDelete(this.id )">删除</button>';
+                        return html;
+                    }
+                }
+            ],
+            onEditableSave: function (field, row, oldValue) {
+                $.ajax({
+                    type: "post",
+                    url: "userEdit/",
+                    data: {"id": row.ID, "field": field, "value": row[field]},
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data['status'] === "success") {
+                            $("#userAdmin").bootstrapTable("refresh");
+                        }
+                    },
+                    error: function () {
+                        alert('编辑失败');
+                    },
+                    complete: function () {
+
+                    }
+                });
+                console.info(field, row[field], oldValue);
+                {#alert('保存成功！')#}
+            }
+        });
+    });
+
+    function userDelete(id) {
+        if (id !== null) {
+            $.ajax({
+                type: "post",
+                url: "userDelete/",
+                data: {"delProfId": id},
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data['status'] === "success") {
+                       $("#userAdmin").bootstrapTable("refresh");
+                    }
+                },
+                error: function () {
+                    alert('删除失败！');
+                },
+                //complete: function () {
+
+                // }
+            })
+        }
+        else{
+            alert('删除失败！')
+        }
+    }
+
+    function createUser() {
+        $.ajax({
+            type: "post",
+            url: "userCreate/",
+            data: {},
+            dataType: 'JSON',
+            success: function (data) {
+                if (data['status'] === "success") {
+                    $("#userAdmin").bootstrapTable("refresh");
+                    $('#userAdmin').bootstrapTable('showColumn', 'pwd');
+                }
+            },
+            error: function () {
+                alert('添加失败！');
+            },
+            //complete: function () {
+
+            // }
+        });
+        //$("#userAdmin").bootstrapTable("refresh");
+    }
+
+</script>
+
+
+</body>
+</html>
+
+

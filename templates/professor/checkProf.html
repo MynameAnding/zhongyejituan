@@ -1,0 +1,264 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- release v4.3.6, copyright 2014 - 2016 Kartik Visweswaran -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+
+    <link rel="stylesheet" href="{% static 'professorTable/css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'professorTable/css/style.css' %}">
+    <link href="{% static 'professorTable/css/layx.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'professorTable/css/professorTable.css' %}">
+    <link rel="stylesheet" href="{% static 'professorTable/css/bootstrap.min.css' %}">
+    {#    <link href="{% static 'professorTable/css/bootstrap-editable.css' %}" rel="stylesheet" type="text/css" />#}
+    <link rel="stylesheet" href="{% static 'professorTable/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'professorTable/css/bootstrap-table.min.css' %}">
+    <script src="{% static 'professorTable/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'professorTable/js/popper.min.js' %}"></script>
+    <script src="{% static 'professorTable/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'professorTable/js/bootstrap-table.js' %}"></script>
+    <script src="{% static 'professorTable/js/bootstrap-table-zh-CN.js' %}"></script>
+
+</head>
+
+<body>
+<div style="width: 95%;margin:0 auto;">
+<table id="unCheckProf" style="background-color: white" class="table table-hover table-striped table-bordered"
+       width="100%">
+    <thead class="thead-light small" align="center" valign="center">
+    </thead>
+    {% csrf_token %}
+</table>
+</div>
+
+
+<script>
+    var dict = {
+        'name': "姓名",
+        "danwei": "单位",
+        "zhengzhimianmao": "政治面貌",
+        "zhiwu": "职务",
+        "zhicheng": "职称",
+        "shenfenzhenghao": "身份证号",
+        "lianxidianhua": "联系电话",
+        "kechengmingcheng": "课程名称",
+        "kaihuhang": "开户行",
+        "kahao": "卡号",
+        "shehuijianzhi": "社会兼职",
+        "hezuoqingkuang": "合作情况",
+        "zhengzhibiaoxian": "政治表现",
+        "shoukejilu": "授课记录",
+        "labels": "标签",
+        "jianjie": "简介",
+        "photos": "照片"
+    };
+    $('#unCheckProf').bootstrapTable({
+        url: '/unCheckProf/',
+        method: 'post',
+        showColumns: true,
+        showRefresh: true,
+        clickToSelect: true,
+        maintainSelected: true,
+        searchAlign:'left',
+        detailView: true,
+        search: true,
+        toolbarAlign: 'left',
+        undefinedText: '无',
+        showFooter: false,
+        //onlyInfoPagination:true,
+        paginationVAlign: 'top',
+        detailFormatter: 'Detail',
+        uniqueId: 'ID',
+        pagination: true, // 是否分页
+        pageList: [5, 10, 15, 20],
+        showPaginationSwitch: true,
+        smartDisplay: true,
+        buttonsAlign: "right",  //按钮位置
+        locale: 'zh-CN',
+        columns: [
+            {
+                field: 'ID',
+                title: '编号',
+                align: 'center',
+                valign: 'center',
+                formatter: function (value, row, index) {
+                    return '<div style="overflow: auto;width:100%;min-width:1.5em;max-height:5em;"> <p style="font-size: small">' + value + '</p></div>';
+                }
+            },
+            {
+                field: 'name',
+                title: '名字',
+                align: 'center',
+                valign: 'center',
+                formatter: function (value, row, index) {
+                    return '<div style="overflow: auto;width:100%;min-width:3em;max-height:5em;"><p style="font-size: medium">' + value + '</p></div>';
+                }
+
+            },
+            {
+                field: 'danwei',
+                title: '单位',
+                align: 'center',
+                valign: 'center',
+                maxWidth: '10em',
+                maxHeight: '5em',
+                formatter: function (value, row, index) {
+                    return '<div style="overflow: auto;width:100%;min-width:5em;max-height:5em;"> <p style="font-size: small">' + value + '</p></div>';
+                }
+            },
+            {
+                field: 'zhengzhimianmao',
+                title: '政治面貌',
+                align: 'center',
+                valign: 'center',
+                maxHeight: '5em',
+                formatter: function (value, row, index) {
+                    return '<div style="overflow: auto;width:100%;min-width:2em;max-height:5em;"> <p style="font-size: small">' + value + '</p></div>';
+                }
+            },
+            {
+                field: 'zhiwu',
+                title: '职务',
+                maxHeight: '5em',
+                align: 'center',
+                valign: 'center',
+                formatter: function (value, row, index) {
+                    return '<div style="overflow: auto;width:100%;min-width:4em;max-height:5em;"> <p style="font-size: small">' + value + '</p></div>';
+                }
+
+            },
+            {
+                field: 'lianxidianhua',
+                title: '联系电话',
+                align: 'center',
+                valign: 'center',
+                formatter: function (value, row, index) {
+                    return '<div style="overflow: auto;width:5em;max-height:5em;"> <p style="font-size: small">' + value + '</p></div>';
+                }
+
+            },
+            {
+                field: 'zhengzhibiaoxian',
+                title: '政治表现',
+                maxHeight: '5em',
+                align: 'center',
+                valign: 'center',
+                visible: false,
+                formatter: function (value, row, index) {
+                    return '<div style="overflow: auto;max-width:4em;max-height:5em;"> <p style="font-size: small">' + value + '</p></div>';
+                }
+            },
+            {
+                field: 'adduser',
+                title: '添加人',
+                maxHeight: '5em',
+                align: 'center',
+                valign: 'center',
+                formatter: function (value, row, index) {
+                    return '<div style="overflow: auto;max-width:4em;max-height:5em;"> <p style="font-size: small">' + value + '</p></div>';
+                }
+            },
+            {
+                title: '操作',
+                align: 'center',
+                valign: 'center',
+                maxWidth: '4em',
+                formatter: function (value, row, index) {
+                    return '<div style="margin:0 auto;width: 100%;min-width: 4em;max-height:5em;"><li><button type="button" class="btn btn-primary btn-sm" id="' + row.ID + '" onclick = "checkProfYes(this.id)"><span class="glyphicon glyphicon-ok"></span>yes</button></li></div>'
+                }
+            }
+        ]
+    });
+
+    function checkProfYes(id) {
+        $.ajax({
+            type: "POST",
+            url: "./checkProfYes/",
+            data: {'profId': id},
+            dataType: "json",
+            success: function (data) {
+                {##}
+                alert("审核通过！")
+            }
+        });
+        $('#unCheckProf').bootstrapTable('removeByUniqueId', id);
+    }
+
+    function Detail(index, row, $detail) {
+        var data = [];
+        var ind = 0;
+        var d = {};
+        for (var key in dict) {
+            if (key !== "photos" && key !== 'jianjie') {
+                if (row[key] === null) {
+                    r = 1;
+                }
+                else {
+                    var r = Math.ceil(row[key].length / 50);
+                }
+                if (ind % 2 === 0) {
+                    d = {};
+                    d["biaoqian1"] = dict[key] + ':';
+                    d["neirong1"] = '<textarea  readonly="readonly" style="width: 100%;align-self:right;overflow: auto;word-break: break-all;"  name="' + key + '" rows="' + r + '" cols=27>' + row[key] + '</textarea>';
+                }
+                else {
+                    d["biaoqian2"] = dict[key] + ':';
+                    d["neirong2"] = '<textarea  readonly="readonly" style="width: 100%;align-self:right;overflow: auto;word-break: break-all;"  name="' + key + '" rows="' + r + '" cols=27>' + row[key] + '</textarea>';
+                    data.push(d);
+                }
+            }
+            ind += 1
+        }
+        data.push(d);
+
+        data.push({
+            "biaoqian1": "简介",
+            "neirong1": '<textarea  readonly="readonly" style="width: 100%;align-self:right;overflow: auto;word-break: break-all;"  name="' + key + '" rows="4" cols=27>' + row['jianjie'] + '</textarea>'
+        });
+        var cur_table = $detail.html('<table></table>').find('table');
+        $(cur_table).bootstrapTable({
+            data: data,
+            uniqueId: "MENU_ID",
+            script: true,
+            striped: true,
+            columns: [{
+                field: 'biaoqian1',
+                width: '15%',
+                title: ''
+            }, {
+                field: 'neirong1',
+                width: '35%',
+                title: ''
+            }, {
+                field: 'biaoqian2',
+                width: '15%',
+                title: ''
+            }, {
+                field: 'neirong2',
+                width: '35%',
+                title: ''
+            }]
+        });
+        // console.info(index,Math.ceil(index / 2));
+        {#$(cur_table).bootstrapTable('mergeCells', {#}
+        {#    index: Math.ceil(ind / 2) - 1,#}
+        {#    field: "neirong1",#}
+        {#    colspan: 3,#}
+        {#    rowspan: 1#}
+
+        $(cur_table).bootstrapTable('mergeCells', {
+            index: Math.ceil(ind / 2)-1,
+            field: "neirong1",
+            colspan: 3,
+            rowspan: 1
+        });
+        {#$(cur_table).bootstrapTable('mergeCells', {index: Math.ceil(ind / 2)+1, field: "neirong1", colspan: 3, rowspan: 1});#}
+    }
+
+</script>
+
+
+</body>
+</html>
+
+
