@@ -1,38 +1,25 @@
 {% extends 'zhongye/base.html' %}
 {% load static from staticfiles %}
 {% block base %}
-    <div style="width: 80%;float:right;">
-
-        <script src="{% static 'professorTable/js/jquery-3.2.1.min.js' %}"></script>
-        <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
-        <link href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css" rel="stylesheet">
-        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
-        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/print/bootstrap-table-print.min.js"></script>
-
-        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table-locale-all.min.js"></script>
-
-
-
-{##}
-{#<div id="toolbar">#}
-{#  <button id="remove" class="btn btn-danger" disabled>#}
-{#    <i class="glyphicon glyphicon-remove"></i> Delete#}
-{#  </button>#}
-{#</div>#}
+  <div style="width: 80%;margin: 0 auto">
+  <div style="height: 200px;margin: 0 auto">
+    <h3 style="text-align: center;line-height: 200px"><span>实验人员实验记录表</span></h3>
+  </div>
+<!--实验人员实验记录表格-->
 <table
   id="table"
 {#  data-toolbar="#toolbar"#}
-  data-search="true"
+{#  data-search="true"#}
   data-show-refresh="true"
   data-show-print="true"
   data-show-fullscreen="true"
-  data-show-columns="true"
-  data-show-columns-toggle-all="true"
+{#  data-show-columns="true"#}
+{#  data-show-columns-toggle-all="true"#}
 {#  data-detail-view="true"#}
   data-show-export="true"
   data-click-to-select="true"
 {#  data-detail-formatter="detailFormatter"#}
-  data-minimum-count-columns="2"
+{#  data-minimum-count-columns="2"#}
   data-show-pagination-switch="true"
   data-pagination="true"
   data-total-field = "biaotou"

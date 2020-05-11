@@ -11,8 +11,6 @@ from django.db import models
 class Allusers(models.Model):
     id = models.IntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
     username = models.CharField(max_length=54)
-    adduserid = models.IntegerField()
-    addusername = models.CharField(max_length=54)
     pwd = models.CharField(max_length=54)
     addtime = models.DateTimeField()
     cx = models.IntegerField()
