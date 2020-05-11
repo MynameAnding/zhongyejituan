@@ -1,0 +1,427 @@
+<!--收样人员委托单表格-->
+{% extends 'zhongye/base.html' %}
+{% load static from staticfiles %}
+{% block base %}
+    <div style="width: 80%;float:right;">
+
+        <script src="{% static 'professorTable/js/jquery-3.2.1.min.js' %}"></script>
+        <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+        <link href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/print/bootstrap-table-print.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table-locale-all.min.js"></script>
+
+<style>
+  .select,
+  #locale {
+    width: 100%;
+  }
+
+  .like {
+    margin-right: 10px;
+  }
+</style>
+
+<div id="toolbar">
+  <button id="remove" class="btn btn-danger" disabled>
+    <i class="glyphicon glyphicon-remove"></i> Delete
+  </button>
+</div>
+<table id="table" data-toolbar="#toolbar" data-search="true" data-show-refresh="true" data-show-toggle="true"
+  data-show-fullscreen="true" data-show-columns="true" data-show-columns-toggle-all="true" data-detail-view="true"
+  data-show-export="true" data-click-to-select="true" data-detail-formatter="detailFormatter"
+  data-minimum-count-columns="2" data-show-pagination-switch="true" data-pagination="true" data-id-field="id"
+  data-page-list="[10, 25, 50, 100, all]" data-show-footer="true" data-side-pagination="server"
+  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data" data-response-handler="responseHandler">
+</table>
+
+<script>
+  var $table = $('#table')
+  var $remove = $('#remove')
+  var selections = []
+
+  function getIdSelections() {
+    return $.map($table.bootstrapTable('getSelections'), function (row) {
+      return row.id
+    })
+  }
+
+  function responseHandler(res) {
+    $.each(res.rows, function (i, row) {
+      row.state = $.inArray(row.id, selections) !== -1
+    })
+    return res
+  }
+
+  function detailFormatter(index, row) {
+    var html = []
+    $.each(row, function (key, value) {
+      html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+    })
+    return html.join('')
+  }
+
+  function operateFormatter(value, row, index) {
+    return [
+      '<a class="like" href="javascript:void(0)" title="Like">',
+      '<i class="fa fa-heart"></i>',
+      '</a>  ',
+    ].join('')
+  }
+
+  window.operateEvents = {
+    'click .like': function (e, value, row, index) {
+      url = "experiment.html?index=" + index;
+      window.location.href = url;
+    }
+  }
+
+  function totalTextFormatter(data) {
+    return 'Total'
+  }
+
+  function totalNameFormatter(data) {
+    return data.length
+  }
+
+  function totalPriceFormatter(data) {
+    var field = this.field
+    return '$' + data.map(function (row) {
+      return +row[field].substring(1)
+    }).reduce(function (sum, i) {
+      return sum + i
+    }, 0)
+  }
+
+  function initTable() {
+    $table.bootstrapTable('destroy').bootstrapTable({
+      height: 550,
+      pagination: false,
+      locale: 'zh-CN',
+      columns: [
+        [{
+          title: '报告编号',
+          field: 'id',
+          colspan: 7,
+          align: 'center'
+        }], [{
+          title: '委托单位',
+          field: 'clients',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'client',
+          colspan: 6,
+          align: 'center'
+        }], [{
+          title: '工程名称',
+          field: 'enjNames',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'enjName',
+          colspan: 6,
+          align: 'center'
+        }], [{
+          title: '邮寄地址',
+          field: 'EmailAddresss',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'EmailAddress',
+          colspan: 4,
+          align: 'center'
+        }, {
+          title: '邮政编码',
+          field: 'postcodes',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'postcode',
+          colspan: 1,
+          align: 'center'
+        }], [{
+          title: '委托类型',
+          field: 'deliveryModes',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'deliveryMode',
+          colspan: 4,
+          align: 'center'
+        }, {
+          title: '委托日期',
+          field: 'dates',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'date',
+          colspan: 1,
+          align: 'center'
+        }], [{
+          title: '报告形式',
+          field: 'reportForms',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'reportForm',
+          colspan: 2,
+          align: 'center'
+        }, {
+          title: '发出方式',
+          field: 'givingModes',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'givingMode',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '联系人',
+          field: 'contacts',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'contact',
+          colspan: 1,
+          align: 'center'
+        }], [{
+          title: '加工方式',
+          field: 'processingModes',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'processingMode',
+          colspan: 2,
+          align: 'center'
+        }, {
+          title: '代表数量',
+          field: 'representNumbers',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'representNumber',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '联系电话',
+          field: 'contactPhones',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'contactPhone',
+          colspan: 1,
+          align: 'center'
+        }], [{
+          title: '生产厂家',
+          field: 'producers',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'producer',
+          colspan: 4,
+          align: 'center'
+        }, {
+          title: '传真',
+          field: 'faxs',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'fax',
+          colspan: 1,
+          align: 'center'
+        }], [{
+          title: '样品名称',
+          field: 'sampleNames',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'sampleName',
+          colspan: 4,
+          align: 'center'
+        }, {
+          title: '样品状态',
+          field: 'sampleStatuss',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'sampleStatus',
+          colspan: 1,
+          align: 'center'
+        }], [{
+          title: '检验费用',
+          field: 'prices',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'price',
+          colspan: 5,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'isPaid',
+          colspan: 1,
+          align: 'center'
+        }],[{
+          title: '注意事项',
+          field: 'Notice',
+          rowspan: 3,
+          align: 'center',
+          valign: 'middle',
+        },{
+          title: '周期',
+          field: 'isUrgent',
+          colspan: 6,
+          align: 'center'
+        }],[{
+          title: '送样数量',
+          field: 'givingNumber',
+          colspan: 6,
+          align: 'center'
+        }],[{
+          title: '检验后样品处置',
+          field: 'proposal',
+          colspan: 6,
+          align: 'center'
+        }], [{
+          title: '发票信息',
+          field: 'invoices',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'invoice',
+          colspan: 6,
+          align: 'center'
+        }], [{
+          title: '交货形式',
+          field: 'givingModes',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'givingMode',
+          colspan: 6,
+          align: 'center'
+        }], [{
+          title: '备注',
+          field: 'remarks',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'remark',
+          colspan: 6,
+          align: 'center'
+        }], [{
+          title: '委托人',
+          field: 'assigners',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'assigner',
+          colspan: 3,
+          align: 'center'
+        },{
+          title: '收样人',
+          field: 'samplePeople',
+          colspan: 1,
+          align: 'center'
+        }, {
+          title: '/',
+          field: 'samplePeople1',
+          colspan: 2,
+          align: 'center'
+        }],[{
+          title: '规格型号',
+          field: 'specifications',
+          colspan: 1,
+          align: 'center'
+        },{
+          title: '牌号级别',
+          field: 'grades',
+          colspan: 1,
+          align: 'center'
+        },{
+          title: '来样编号',
+          field: 'givingSampleId',
+          colspan: 1,
+          align: 'center'
+        },{
+          title: '试样编号',
+          field: 'sampleId',
+          colspan: 1,
+          align: 'center'
+        },{
+          title: '检验项目及数量',
+          field: 'testItem',
+          colspan: 2,
+          align: 'center'
+        },{
+          title: '检验依据',
+          field: 'basis',
+          colspan: 1,
+          align: 'center'
+        }]
+      ]
+    })
+    $table.on('check.bs.table uncheck.bs.table ' +
+      'check-all.bs.table uncheck-all.bs.table',
+      function () {
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+        // save your data, here just save the current page
+        selections = getIdSelections()
+        // push or splice the selections if you want to save all data selections
+      })
+    $table.on('all.bs.table', function (e, name, args) {
+      console.log(name, args)
+    })
+    $remove.click(function () {
+      var ids = getIdSelections()
+      $table.bootstrapTable('remove', {
+        field: 'id',
+        values: ids
+      })
+      $remove.prop('disabled', true)
+    })
+  }
+
+  $(function () {
+    initTable()
+
+    $('#locale').change(initTable)
+  })
+</script>
+</div>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="{% static 'professorTable/css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'professorTable/css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'professorTable/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'professorTable/css/all.css' %}">
+
+    <script src="{% static 'professorTable/js/popper.min.js' %}"></script>
+    <script src="{% static 'professorTable/js/bootstrap.min.js' %}"></script>
+
+{% endblock base %}
