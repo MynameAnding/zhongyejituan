@@ -44,56 +44,6 @@ def test_index(request):
 def test(request):
     return render(request, 'zhongye/test.html')
 
-@csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
-def userEdit(request):
-    if request.is_ajax():
-        userId = request.POST['id']
-        field = request.POST['field']
-        value = request.POST['value']
-        data = {field:value}
-        Allusers.objects.filter(id=userId).update(**data)
-        return  JsonResponse({'status':"success"})
-    else:
-        return HttpResponse({"status":"error"})
-
-@csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
-def userData(request):
-    allUsers = Allusers.objects.filter().all()
-    print(allUsers)
-    data = json.loads(serializers.serialize('json', allUsers))
-    #print(data)
-    result = []
-    for item in data:
-        prof = item['fields']
-        prof['ID'] = item['pk']
-        prof['addtime'] = prof['addtime'].replace("T",' ')
-        prof['addtime'] = prof['addtime'].replace("Z", ' ')
-        result.append(prof)
-   # print(result)
-    return HttpResponse(json.dumps(result))
-
-@csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
-def userCreate(request):
-    if request.is_ajax():
-        data={}
-        data['adduserid'] = request.session.get('LoginSession')['LoginId']
-        data['addusername'] = request.session.get('LoginSession')['LoginName']
-        Allusers.objects.create(**data)
-        return JsonResponse({'status':'success'})
-    else:
-        return HttpResponse("<script>alert('非法操作！');location.href='/';</script>")
-
-@csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
-def userDelete(request):
-    if request.is_ajax():
-        id = request.POST.get('delProfId')
-        #print(id)
-        Allusers.objects.filter(id=id).delete()
-        return JsonResponse({'status':'success'})
-    else:
-        return HttpResponse("<script>alert('非法操作！');location.href='/';</script>")
-
-
 
 @csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
 def login(request):  # 验证登录信息
@@ -101,14 +51,22 @@ def login(request):  # 验证登录信息
         username = request.POST['username']
         userpwd = request.POST['userpwd']
         user = Allusers.objects.filter(username=username).all()
-        if user.count() >0:
+        if user.count() > 0:
             user = user.first()
             if user.pwd == userpwd:
                 LoginSession = {'LoginName': username, 'LoginId': user.id,'LoginCx':user.cx }
                 request.session['LoginSession'] = LoginSession
                 request.session.set_expiry(0)
                 # return render(request, 'zhongye/professorTable.html')
-                return HttpResponseRedirect('/zhongye/')
+                if user.cx == 0:
+                    return HttpResponseRedirect("/sample_index/")
+                    # return render(request, 'zhongye/sample_index.html')
+                elif user.cx == 1:
+                    return HttpResponseRedirect("/assignment_index/")
+                elif user.cx == 2:
+                    return HttpResponseRedirect("/test_index/")
+                else:
+                    return HttpResponseRedirect("/approval_index/")
             else:
                 return HttpResponse('<script>alert("登录信息(密码)填写有误，请重新填写！");location.href="/";</script>')
         return HttpResponse('<script>alert("登录信息(用户名)填写有误，请重新填写！");location.href="/";</script>')

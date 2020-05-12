@@ -18,5 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^professor_table/', admin.site.urls),
-    url(r'^',include(('zhongyeAdmin.urls','zhongye'),namespace='zhongye'))
+    url(r'^',include(('zhongyeControl.urls','zhongye'),namespace='zhongye'))
 ]

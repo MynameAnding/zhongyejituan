@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'zhongyeAdmin',
+    'zhongyeControl',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'zhongye.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'zhongzhijituan',
+        'NAME': 'tims',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'localhost',

@@ -5,30 +5,37 @@
 
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>中冶建筑研究总院有限公司</title>
-    <meta charset="UTF-8">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="{% static 'professorTable/js/jquery-3.2.1.min.js' %}"></script>
-    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
-    <link href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/print/bootstrap-table-print.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>中冶建筑研究总院有限公司</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="{% static 'professorTable/js/jquery-3.2.1.min.js' %}"></script>
+  <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+  <link href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/print/bootstrap-table-print.min.js"></script>
 
-    <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table-locale-all.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table-locale-all.min.js"></script>
+
 </head>
+
 <body>
 
+<!-- Start Welcome area -->
+<div style="height: 50px;width: 100%;background-color: #0044cc;">
+    <span  style="float: right;margin-right: 100px;line-height: 50px;color:#ffffff;">Prof.Anderson</span>
+</div>
 
-    <div style="background-color: rgba(255,255,255,0.27)">
-         {% block base %}
-         {% endblock base %}
-    </div>
-    <footer>
-        {% include 'zhongye/footer.html' %}
-    </footer>
+
+<div>
+  {% block base %}
+  {% endblock base %}
+</div>
+<footer>
+  {% include 'zhongye/footer.html' %}
+</footer>
 
 
 
