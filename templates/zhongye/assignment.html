@@ -41,8 +41,6 @@
 
 <script>
   var $table = $('#table')
-
-
   function initTable() {
     $table.bootstrapTable('destroy').bootstrapTable({
       {#height: 550,#}
@@ -53,7 +51,8 @@
           title: '报告编号',
           field: 'id',
           colspan: 13,
-          align: 'center'
+          align: 'center',
+          valign:'middle'
         }],[{
           title: '样品名称',
           field: 'sampleNames',
@@ -167,16 +166,6 @@
   })
 </script>
 </div>
-    <meta charset="utf-8">
 
-    <link rel="stylesheet" href="{% static 'professorTable/css/reset.css' %}">
-    <link rel="stylesheet" href="{% static 'professorTable/css/style.css' %}">
-
-    <link rel="stylesheet" href="{% static 'professorTable/css/bootstrap.min.css' %}">
-
-    <link rel="stylesheet" href="{% static 'professorTable/css/all.css' %}">
-
-    <script src="{% static 'professorTable/js/popper.min.js' %}"></script>
-    <script src="{% static 'professorTable/js/bootstrap.min.js' %}"></script>
 
 {% endblock base %}

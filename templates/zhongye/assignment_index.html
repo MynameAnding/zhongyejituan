@@ -64,6 +64,17 @@
           align: 'center',
           valign: 'middle',
           sortable: true,
+          editable: {
+                type: "text",
+                title: "报告编号",
+                validate: function (value) {
+                  if (!value) {
+                    return '报告编号不能为空';
+
+                  }
+                }
+
+              }
         },  {
           title: '样品名称',
           field: 'sampleName',
@@ -92,29 +103,47 @@
           field: 'operate',
           title: '操作',
           align: 'center',
-
+          events: window.operateEvents,
+          formatter: operateFormatter
         }
       ]
     })
 
+
+  }
+  function operateFormatter(value, row, index) {
+    return [
+      '<form name="form" method="post" action="/assignment/">',
+      '<input type = "hidden" value = "',
+      row.id,
+      '" >',
+      '<input type="submit" name="Submit" value="分配">',
+      '</form>',
+    ].join('')
   }
 
+  window.operateEvents = {
+    'click .begin': function (e, value, row, index) {
+      $.ajax({
+        method: "POST",
+        data: {"sample_id": row.sample_id},
+        url: "/toConsignment/",
+        success: function (result) {
+          {#console.log(jQuery.parseJSON(result))#}
+
+        },
+        error: function (result) {
+
+        }
+      })
+    }
+  }
   $(function() {
     initTable()
 
   })
 </script>
 </div>
-    <meta charset="utf-8">
 
-    <link rel="stylesheet" href="{% static 'professorTable/css/reset.css' %}">
-    <link rel="stylesheet" href="{% static 'professorTable/css/style.css' %}">
-
-    <link rel="stylesheet" href="{% static 'professorTable/css/bootstrap.min.css' %}">
-
-    <link rel="stylesheet" href="{% static 'professorTable/css/all.css' %}">
-
-    <script src="{% static 'professorTable/js/popper.min.js' %}"></script>
-    <script src="{% static 'professorTable/js/bootstrap.min.js' %}"></script>
 
 {% endblock base %}

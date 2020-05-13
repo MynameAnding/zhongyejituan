@@ -4,97 +4,121 @@
 {% load static from staticfiles %}
 {% block base %}
   <div style="width: 80%;margin: 0 auto">
-  <div style="height: 200px;margin: 0 auto">
-    <h3 style="text-align: center;line-height: 200px"><span>收样人员首页表</span></h3>
+    <div style="height: 200px;margin: 0 auto">
+      <h3 style="text-align: center;line-height: 200px"><span>收样人员首页表</span></h3>
+    </div>
+
+    <table
+      id="table"
+      data-search="true"
+      data-show-refresh="true"
+      data-show-toggle="true"
+      data-show-fullscreen="true"
+      data-show-columns="true"
+      data-show-columns-toggle-all="true"
+      data-show-export="true"
+      data-click-to-select="true"
+      data-minimum-count-columns="2"
+      data-show-pagination-switch="true"
+      data-pagination="true"
+      data-id-field="id"
+      data-page-list="[10, 25, 50, 100, all]"
+      data-show-footer="true"
+      data-side-pagination="server"
+    >
+    </table>
+
+    <script>
+      var $table = $('#table')
+
+      function initTable() {
+        $table.bootstrapTable({
+          {#height: 650,#}
+          locale: 'zh-CN',
+          url: "/samIndexData/",
+
+          method: "GET",
+          columns: [
+            {#{#}
+            {#  field: 'state',#}
+            {#  checkbox: true,#}
+            {#  align: 'center',#}
+            {#  valign: 'middle'#}
+
+            {
+              title: '报告编号',
+              field: 'sample_id',
+              align: 'center',
+              valign: 'middle',
+              {#sortable: true,#}
+              editable: {
+                type: "text",
+                title: "报告编号",
+                validate: function (value) {
+                  if (!value) {
+                    return '报告编号不能为空';
+
+                  }
+                }
+
+              }
+            }, {
+              title: '委托单位',
+              field: 'company_name',
+              align: 'center',
+              valign: 'middle',
+              sortable: true,
+            }, {
+              title: '工程名称',
+              field: 'project_name',
+              align: 'center',
+              valign: 'middle',
+              sortable: true,
+            }, {
+              field: 'operate',
+              title: '操作',
+              align: 'center',
+              events: window.operateEvents,
+              formatter: operateFormatter
+            }
+          ]
+        })
+
+      }
+
+      function operateFormatter(value, row, index) {
+        return [
+          '<form name="form" method="post" action="/consignment/">',
+          '<input type = "hidden" value = "',
+          row.sample_id,
+          '" >',
+          '<input type="submit" name="Submit" value="开始">',
+          '</form>',
+        ].join('')
+      }
+
+      window.operateEvents = {
+        'click .begin': function (e, value, row, index) {
+          $.ajax({
+            method: "POST",
+            data: {"sample_id": row.sample_id},
+            url: "/toConsignment/",
+            success: function (result) {
+              {#console.log(jQuery.parseJSON(result))#}
+
+            },
+            error: function (result) {
+
+            }
+          })
+        }
+      }
+      $(function () {
+        initTable()
+
+      })
+    </script>
   </div>
 
-
-<table
-  id="table"
-  data-toolbar="#toolbar"
-{#  data-search="true"#}
-  data-show-refresh="true"
-{#  data-show-toggle="true"#}
-  data-show-fullscreen="true"
-{#  data-show-columns="true"#}
-{#  data-show-columns-toggle-all="true"#}
-{#  data-detail-view="true"#}
-  data-show-export="true"
-{#  data-click-to-select="true"#}
-{#  data-detail-formatter="detailFormatter"#}
-{#  data-minimum-count-columns="2"#}
-  data-show-pagination-switch="true"
-  data-pagination="true"
-  data-show-print="true"
-  data-id-field="id"
-  data-page-list="[10, 25, 50, 100, all]"
-{#  data-show-footer="true"#}
-  data-side-pagination="server"
-  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
-{#  data-response-handler="responseHandler"#}
->
-</table>
-
-<script>
-  var $table = $('#table')
-
-
-  function initTable() {
-    $table.bootstrapTable('destroy').bootstrapTable({
-      {#height: 550,#}
-      locale: 'zh-CN',
-      columns: [
-        {#{#}
-        {#  field: 'state',#}
-        {#  checkbox: true,#}
-        {#  align: 'center',#}
-        {#  valign: 'middle'#}
-
-        {
-          title: '报告编号',
-          field: 'id',
-          align: 'center',
-          valign: 'middle',
-          sortable: true,
-        }, {
-          title: '委托单位',
-          field: 'client',
-          align: 'center',
-          valign: 'middle',
-          sortable: true,
-        }, {
-          title: '工程名称',
-          field: 'enjName',
-          align: 'center',
-          valign: 'middle',
-          sortable: true,
-        }, {
-          field: 'operate',
-          title: '操作',
-          align: 'center',
-
-        }
-      ]
-    })
-
-  }
-
-  $(function() {
-    initTable()
-
-  })
-</script>
-</div>
-    <meta charset="utf-8">
-
-    <link rel="stylesheet" href="{% static 'professorTable/css/reset.css' %}">
-    <link rel="stylesheet" href="{% static 'professorTable/css/style.css' %}">
-
-    <link rel="stylesheet" href="{% static 'professorTable/css/bootstrap.min.css' %}">
-
-    <link rel="stylesheet" href="{% static 'professorTable/css/all.css' %}">
-
-    <script src="{% static 'professorTable/js/popper.min.js' %}"></script>
-    <script src="{% static 'professorTable/js/bootstrap.min.js' %}"></script>
 
 {% endblock base %}
