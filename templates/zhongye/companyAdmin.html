@@ -1,0 +1,287 @@
+<!--委托公司管理-->
+{% load static from staticfiles %}
+
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+
+  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>
+  <script src="{% static 'base/js/common.js' %}"></script>
+
+
+  <script src="{% static 'base/js/tableExport.min.js' %}"></script>
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  {#  <script src="{% static 'base/js/layer.js' %}"></script>#}
+  <script
+    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
+
+
+</head>
+
+<body style="width: 95%;margin: 0 auto;">
+
+
+<div style="margin-top: 50px;">
+  <div id="toolbar">
+    <input type="button" onclick="add()" class="btn btn-primary" value="添加">
+  </div>
+  <table
+    {#  style="margin-top: 50px;"#}
+    id="table"
+    data-toolbar="#toolbar"
+    data-search="true"
+    data-show-refresh="true"
+    {#    data-show-toggle="true"#}
+    data-show-fullscreen="true"
+    data-show-columns="true"
+    data-show-columns-toggle-all="true"
+    data-detail-view="true"
+    data-show-export="true"
+    data-click-to-select="true"
+    data-detail-formatter="detailFormatter"
+    data-minimum-count-columns="2"
+    data-show-pagination-switch="true"
+    data-pagination="true"
+    {#    data-id-field="id"#}
+    data-page-list="[5,10, 25, 50, 100, all]"
+    {#    data-show-footer="true"#}
+    data-side-pagination="server"
+    {#    data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"#}
+    {#    data-response-handler="responseHandler">#}
+  >
+  </table>
+</div>
+<script>
+  var $table = $('#table')
+  var selections = []
+  var sample_id = getQueryString("id")
+
+
+  function add() {
+    $.ajax({
+      type: "POST",//方法类型
+      dataType: "json",//预期服务器返回的数据类型
+      url: "/sample_index/updateCompany/",//url
+      data: {},
+      success: function (result) {
+        if (result.statue == 200) {
+          layer.alert("添加成功！");
+          initTable();
+        }
+      },
+      error: function () {
+        alert("添加异常！");
+      }
+    });
+  }
+
+  companyDict = {
+    "id": "编号",
+    'contactor': '联系人',
+    'mobile': '联系电话',
+    'address': '邮寄地址',
+    'code': '邮政编码',
+    'company_tel': '单位电话',
+    'taxpayer_identity_number': '纳税人识别码',
+    'bank': '开户行',
+    'account': '账号',
+    'fax': '传真',
+    'company_name': '公司名称'
+  }
+
+  function detailFormatter(index, row) {
+    {#console.log("3333333333333333")#}
+    var html = []
+    html.push("<form id = '" + index + "' method='POST' onsubmit='return false'  action='##'>{% csrf_token %} ")
+    $.each(row, function (key, value) {
+      value == null ? "" : value;
+      if (key != "id") {
+        html.push('<div><b>' + companyDict[key] + ':</b> <input id="' + key + '" type="text"  class="form-control" name="' + key + '" value= "' + value + '"></div>')
+      } else {
+        html.push('<div><b>' + companyDict[key] + ':</b> <input readonly="true" id="' + key + '" type="text"  class="form-control" name="id" value= "' + value + '"></div>')
+      }
+    })
+    html.push("<br><input type='button' value='提交' onclick='sub($(this))' class='btn btn-success' style='float: right'> </form>")
+    return html.join('')
+  }
+
+  function sub(object) {
+    console.log(object)
+    $.ajax({
+      type: "POST",//方法类型
+      dataType: "json",//预期服务器返回的数据类型
+      url: "/sample_index/updateCompany/",//url
+      data: object.parents('form').serialize(),
+      success: function (result) {
+        console.log(result);//打印服务端返回的数据(调试用)
+        if (result.statue == 200) {
+          layer.alert("修改成功！");
+          initTable();
+          window.parent.initTable();
+        }
+      },
+      error: function () {
+        alert("异常！");
+      }
+    });
+  }
+
+  function operateFormatter(value, row, index) {
+    return [
+      {#'<form " method="POST" action="/sample_index/updateCommissionSheet/">',#}
+      {#'<input name = "id" type = "hidden" value = "' + getQueryString("id") + '" >',#}
+      {#'<input name = "company_name" type = "hidden" value = "' + row.company_name + '" >',#}
+      '<input type="button" onclick="shiyong(',row.id,",'",row.company_name,"'",')" class="btn btn-info btn-sm" value="使用">',
+      {#'</form>',#}
+    ].join('')
+  }
+
+  function shiyong(company_id,company_name) {
+    if (company_name == null || company_name == "") {
+      layer.alert("公司名称不能为空！")
+    } else {
+      $.ajax({
+        url: "/sample_index/updateCommissionSheet/",
+        data: {"id": sample_id, "company_id": company_id},
+        method: "POST",
+        success: function (result) {
+          parent.layer.closeAll()
+          window.parent.initTable()
+        }
+      })
+    }
+  }
+
+  function initTable() {
+    $table.bootstrapTable('destroy').bootstrapTable({
+      url: "/sample_index/loadCompany/",
+      {#height:600,#}
+      locale: 'zh-CN',
+      columns: [
+        [{
+          title: '编号',
+          field: 'id',
+          align: 'center',
+          valign: 'middle'
+        },
+          {
+            title: '公司名称',
+            field: 'company_name',
+            align: 'center',
+            valign: 'middle'
+          }, {
+          title: '联系人',
+          field: "contactor",
+          colspan: 1,
+          align: 'center',
+          valign: "middle"
+        },
+          {
+            field: 'mobile',
+            title: '联系电话',
+
+            align: 'center',
+            valign: "middle"
+          }, {
+          field: 'address',
+          title: '邮寄地址',
+          visible: false,
+          align: 'center',
+          valign: "middle"
+        }, {
+          field: 'code',
+          title: '邮寄编码',
+          visible: false,
+          align: 'center',
+          valign: "middle"
+        },
+          {
+            field: 'company_tel',
+            title: '单位电话',
+            visible: false,
+            align: 'center',
+            valign: "middle"
+
+          },
+          {
+            field: 'taxpayer_identity_number',
+            title: '纳税人识别码',
+            visible: false,
+            align: 'center',
+            valign: "middle"
+
+          }, {
+          field: 'bank',
+          title: '开户行',
+          visible: false,
+          align: 'center',
+          valign: "middle"
+
+        }, {
+          field: 'count',
+          title: '账号',
+          visible: false,
+          align: 'center',
+          valign: "middle"
+
+        }, {
+          field: 'fax',
+          title: '传真',
+          visible: false,
+          align: 'center',
+          valign: "middle"
+        }, {
+          title: '操作',
+          {#width:60,#}
+          align: 'center',
+          valign: "middle",
+          formatter: operateFormatter
+        }]
+      ]
+    })
+    $table.on('check.bs.table uncheck.bs.table ' +
+      'check-all.bs.table uncheck-all.bs.table',
+      function () {
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+        // save your data, here just save the current page
+        selections = getIdSelections()
+        // push or splice the selections if you want to save all data selections
+      })
+    $table.on('all.bs.table', function (e, name, args) {
+      console.log(name, args)
+    })
+  }
+
+  $(function () {
+    initTable()
+  })
+</script>
+
+</div>
+
+</body>
+
+</html>

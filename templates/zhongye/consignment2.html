@@ -1,0 +1,468 @@
+<!--收样人员委托单表格-->
+{% load static from staticfiles %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>中冶建筑研究总院有限公司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+
+
+  <script src="{% static 'base/js/tableExport.min.js' %}"></script>
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+
+  <script
+    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
+
+
+</head>
+
+<body>
+
+<!-- Start Welcome area -->
+<div style="height: 50px;width: 100%;background-color: #0044cc;">
+  <span
+    style="float: right;margin-right: 100px;line-height: 50px;color:#ffffff;">{{ request.session.LoginSession.LoginName }}</span>
+</div>
+
+
+<div>
+  <div style="width: 60%;margin: 0 auto">
+    <div style="height: 200px;margin: 0 auto">
+      <h3 style="text-align: center;line-height: 200px">收样人员委托单表</h3>
+    </div>
+    <table id="table"
+      {#           data-toolbar="#toolbar"#}
+      {#           data-show-refresh="true"#}
+           data-show-fullscreen="true"
+      {#           data-show-export="true"#}
+      {#           data-show-pagination-switch="true"#}
+      {#           data-pagination="true"#}
+           data-show-print="true"
+      {#           data-id-field="id"#}
+      {#           data-page-list="[10, 25, 50, 100, all]"#}
+           data-side-pagination="server"
+    >
+    </table>
+
+    <script>
+      var $table = $('#table')
+
+
+      function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+          {#height: 750,#}
+          pagination: false,
+          locale: 'zh-CN',
+          columns: [
+            {#[{#}
+            {#  title: '报告编号: {{ data.report_id  }} ',#}
+            {#  field: 'id',#}
+            {#  colspan: 7,#}
+            {#  align: 'center',#}
+            {#  valign: 'middle'#}
+
+            {#  title: '委托单位',#}
+            {#  field: 'clients',#}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '  <span id = "company_name">{{ company.company_name }}</span>',#}
+            {#  field: 'client',#}
+            {#  colspan: 6,#}
+            {#  align: 'center'#}
+
+            [{
+              title: '工程名称',
+              field: 'enjNames',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '  <span id = "projecy_name">{{ data.project_name }}</span>',
+              field: 'enjName',
+              colspan: 5,
+              align: 'center',
+              valign: "middle"
+            }],
+            {#[{#}
+            {#  title: '邮寄地址',#}
+            {#  field: 'EmailAddresss',#}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '  <span id = "address">{{ company.address }}</span>',#}
+            {#  field: 'EmailAddress',#}
+            {#  colspan: 4,#}
+            {#  align: 'center'#}
+
+            {#  title: '邮政编码',#}
+            {#  field: 'postcodes',#}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '   <span id = "code">{{ company.code }}</span>',#}
+            {#  field: 'postcode',#}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            [{
+              title: '委托类型',
+              field: 'deliveryModes',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <span id = "type">{{ data.type }}</span>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '委托日期',
+              field: 'dates',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '    <span id = "date">{{ data.date }}</span>',
+              field: 'date',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }], [{
+              title: '报告形式',
+              field: 'reportForms',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <span id = "presentation">{{ data.presentation }}</span>',
+              field: 'reportForm',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '发出方式',
+              field: 'givingModes',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <span id = "delivery">{{ data.delivery }}</span>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            },
+              {#  {#}
+              {#  title: '联系人',#}
+              {##}
+              {#  colspan: 1,#}
+              {#  align: 'center'#}
+
+              {#  title: '   <span id = "contactor">{{ company.contactor }}</span>',#}
+              {##}
+              {#  colspan: 1,#}
+              {#  align: 'center'#}
+
+            ],
+            [{
+              title: '加工方式',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '  <span id = "processing_method">{{ data.processing_method }}</span>',
+
+              colspan: 2,
+              align: 'center'
+            }, {
+              title: '代表数量',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '   <span id = "number">{{ data.number }}</span>',
+              colspan: 2,
+              align: 'center'
+            }], [{
+              title: '生产厂家',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '   <span id = "manufactory">{{ data.manufactory }}</span>',
+              colspan: 5,
+              align: 'center'
+            }],
+            {#[{#}
+            {#  title: '样品名称',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: ' <span id = "yangpin_name">{{ data.yangpin_name }}</span>',#}
+            {##}
+            {#  colspan: 4,#}
+            {#  align: 'center'#}
+
+            {#  title: '样品状态',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '   <span id = "sample_state">{{ data.sample_state }}</span>',#}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '规格型号',#}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '牌号级别',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '来样编号',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '试样编号',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '检验项目及数量',#}
+            {##}
+            {#  colspan: 2,#}
+            {#  align: 'center'#}
+
+            {#  title: '检验依据',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '<span id = "sample_state">{{ data.sample_state }}</span>',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '<span id = "sample_state">{{ data.sample_state }}</span>',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '<span id = "sample_state">{{ data.sample_state }}</span>',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '<span id = "sample_state">{{ data.sample_state }}</span>',#}
+            {##}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            {#  title: '<span id = "sample_state">{{ data.sample_state }}</span>',#}
+            {##}
+            {#  colspan: 2,#}
+            {#  align: 'center'#}
+
+            {#  title: '<span id = "sample_state">{{ data.sample_state }}</span>',#}
+            {#  colspan: 1,#}
+            {#  align: 'center'#}
+
+            [{
+              title: '检验费用',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<span id = "fee">{{ data.fee }}</span>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            },
+              {
+                title: '预交押金',
+                colspan: 2,
+                valign: "middle",
+                align: 'center'
+                {#  }, {#}
+                {#  title: '<span id = "deposit">{{ data.deposit }}</span>',#}
+                {#  colspan: 1,#}
+                {#  align: 'center',#}
+                {#  valign: "middle"#}
+              },
+              {
+                title: '  <span id = "paid">{{ data.paid }}</span>',
+                colspan: 1,
+                valign: "middle",
+                align: 'center'
+              }], [{
+              title: '周期：',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<span id = "sample_state">{{ data.sample_state }}</span>',
+              colspan: 5,
+              align: 'left',
+              valign: "middle"
+            }], [{
+              title: '送样数量：',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<span id = "sample_number">{{ data.sample_number }}</span>',
+
+              colspan: 5,
+              align: 'left',
+              valign: "middle"
+            }], [{
+              title: '检验后样品处理',
+
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<span id = "sample_disposal">{{ data.sample_disposal }}</span>',
+              colspan: 5,
+              align: 'left',
+              valign: "middle"
+            }],
+            [{
+              title: '发票信息',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle',
+            }, {
+
+              {#title: '   <div><div class="input-group input-group-sm" style="width: auto" >' +#}
+              {#  '            <label><input type="checkbox" style="width: 30%">普通发票</lable>' +#}
+              {#  '            <label ><input type="checkbox" style="width: 30%">增值税发票（请提供增值税发票信息：单位名称、地址、电话、纳税人识别号、账号、开户银行）</lable>' +#}
+              {#  '            </div></div>',#}
+              title: '<span id = "invoice">{{ data.invoice }}</span>',
+              colspan: 5,
+              align: 'center',
+              valign: 'middle',
+            }],
+
+            [{
+              title: '备注',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: ' <span id = "remarks">{{ data.sample_state }}</span>',
+              colspan: 5,
+              align: 'center',
+              valign: "middle"
+            }]
+            {#[{#}
+            {#  title: ' <span>中心地址：北京市海淀区西土城33号（中冶建筑研究总院有限公司5号楼1层）</br>' +#}
+            {#    '邮政编码：100088</br>' +#}
+            {#    '联系电话：（010）82227340</br>' +#}
+            {#    '传&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;真：（010）82227340</span>',#}
+            {#  colspan: 4,#}
+            {#  align: 'left',#}
+            {#  valign: "middle"#}
+
+            {#  title: ' <span>收款单位：中冶建筑研究总院有限公司</br>' +#}
+            {#    '开户银行：中国工商银行北京北太平庄支行</br>' +#}
+            {#    '账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：0200010019200070269</br>' +#}
+            {#    '财务电话：（010）82227341</br></span>' +#}
+            {#    '<span style="color: red;">*特别说明:汇款时备注上钢检中心（非常重要）</span>',#}
+            {#  colspan: 3,#}
+            {#  align: 'left',#}
+            {#  valign: "middle"#}
+
+            {#  title: ' 委托人：<span id = "client">{{ data.client }}</span>',#}
+            {##}
+            {#  colspan: 4,#}
+            {#  align: 'left',#}
+            {#  valign: "middel"#}
+
+            {#  title: '  收样人：<span id = "sample_recipient">{{ data.recipient }}</span>',#}
+            {#  colspan: 3,#}
+            {#  align: 'left',#}
+            {#  valign: "middle"#}
+
+            {#[{#}
+            {#  title: ' <span>注意:1.委托单一式二联，客户凭第二联取检验报告；</br>' +#}
+            {#    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.客户在确认本中心检验能力和检验费用后签署此委托单，委托单是双方建立委托关系的凭证；</br>' +#}
+            {#    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.检验结果只对来样负责，委托方对样品及其相关信息的真实性负责；</br>' +#}
+            {#    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.委托单位对检验报告若有异议，应于收到报告之日起十五日之内向检验单位提出，逾期不予受理</span>',#}
+            {#  colspan: 7,#}
+            {#  align: 'left',#}
+            {#  valign: "middel"#}
+
+          ]
+        })
+
+      }
+
+      $(function () {
+        initTable()
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          predend:'委托类型',//编辑框的标题
+          source: [{value: "1", text: "一般"}, {value: "2", text: "见证"}, {value: "3", text: "仲裁"}]
+        })
+        $("#date").editable({
+          type: "date",
+          title: "委托日期"
+        })
+        $("#remarks").editable({
+          type: "textarea",
+          title: "备注",
+          rows:3,
+        })
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+        $("#invoice").editable()
+
+
+      })
+    </script>
+    <script></script>
+  </div>
+
+</div>
+<footer>
+  {% include 'zhongye/footer.html' %}
+</footer>
+
+<script src="{% static 'consignment/js/consignment.js' %}"></script>
+</body>
+
+</html>

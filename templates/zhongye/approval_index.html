@@ -3,28 +3,32 @@
 {% block base %}
 
   <div style="width: 80%;margin: 0 auto">
-  <div style="height: 200px;margin: 0 auto">
-    <h3 style="text-align: center;line-height: 200px"><span>审批人员首页表</span></h3>
-  </div>
+    <div style="height: 200px;margin: 0 auto">
+      <h3 style="text-align: center;line-height: 200px"><span>审批人员首页表</span></h3>
+    </div>
 
 
     <!--审批人员首页表-->
-
+{#    <div id="toolbar">#}
+{#      <button id="create" class="btn btn-primary" disabled>#}
+{#        <i class="glyphicon glyphicon-remove"></i> Delete#}
+{#      </button>#}
+{#    </div>#}
     <table
       id="table"
       data-toolbar="#toolbar"
       {#  data-search="true"#}
       data-show-refresh="true"
-{#      data-show-toggle="true"#}
+      {#      data-show-toggle="true"#}
       data-show-fullscreen="true"
-{#      data-show-columns="true"#}
+      {#      data-show-columns="true"#}
       data-show-print="true"
-{#      data-show-columns-toggle-all="true"#}
+      {#      data-show-columns-toggle-all="true"#}
 
       data-show-export="true"
-{#      data-click-to-select="true"#}
+      {#      data-click-to-select="true"#}
 
-{#      data-minimum-count-columns="2"#}
+      {#      data-minimum-count-columns="2"#}
       data-show-pagination-switch="true"
       data-pagination="true"
       data-id-field="id"

@@ -21,7 +21,7 @@ class Allusers(models.Model):
 
 
 class CommissionCompany(models.Model):
-    company_name = models.CharField(primary_key=True, max_length=255)
+    company_name = models.CharField(max_length=255)
     contactor = models.CharField(max_length=255)
     mobile = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
@@ -38,7 +38,6 @@ class CommissionCompany(models.Model):
 
 
 class CommissionSheet(models.Model):
-    company_name = models.CharField(max_length=255, blank=True, null=True)
     period = models.CharField(max_length=2, blank=True, null=True)
     laiyang_id = models.CharField(max_length=255, blank=True, null=True)
     delivery = models.CharField(max_length=2, blank=True, null=True)
@@ -46,7 +45,7 @@ class CommissionSheet(models.Model):
     type = models.CharField(max_length=2, blank=True, null=True)
     sample_state = models.CharField(max_length=255, blank=True, null=True)
     number = models.IntegerField(blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
     presentation = models.CharField(max_length=4, blank=True, null=True)
     processing_method = models.CharField(max_length=5, blank=True, null=True)
     manufactory = models.CharField(max_length=255, blank=True, null=True)
@@ -55,39 +54,34 @@ class CommissionSheet(models.Model):
     fee = models.FloatField(blank=True, null=True)
     deposit = models.FloatField(blank=True, null=True)
     yangpin_name = models.CharField(max_length=255, blank=True, null=True)
-    test_basis = models.CharField(max_length=255, blank=True, null=True)
+    test_basis = models.CharField(max_length=255)
     items = models.CharField(max_length=255, blank=True, null=True)
-    sample_id = models.AutoField(primary_key=True)
+    deadline = models.DateField(blank=True, null=True)
+    assign_people = models.IntegerField(blank=True, null=True)
+    assign_time = models.DateTimeField(blank=True, null=True)
+    report_id = models.CharField(max_length=255)
+    command_date = models.DateField(blank=True, null=True)
+    company_id = models.IntegerField(blank=True, null=True)
+    invoice = models.CharField(max_length=30)
+    sample_number = models.IntegerField(blank=True, null=True)
+    remarks = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'commission_sheet'
 
 
-class MechanicsExp(models.Model):
+class OriginalSample(models.Model):
     sample_id = models.AutoField(primary_key=True)
-    max_n_after_bre = models.FloatField(db_column='max_N_after_bre', blank=True, null=True)  # Field name made lowercase.
-    max_n_origin = models.FloatField(db_column='max_N_origin', blank=True, null=True)  # Field name made lowercase.
-    post_break_gauge = models.FloatField(db_column='post_break_ gauge', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    origin_gauge = models.FloatField(blank=True, null=True)
-    peak_load = models.FloatField(blank=True, null=True)
-    yeild_load = models.FloatField(blank=True, null=True)
-    rel = models.FloatField(db_column='ReL', blank=True, null=True)  # Field name made lowercase.
-    rm = models.FloatField(db_column='Rm', blank=True, null=True)  # Field name made lowercase.
-    a = models.FloatField(db_column='A', blank=True, null=True)  # Field name made lowercase.
-    rm0_rel0 = models.FloatField(db_column='Rm0/ReL0', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    rel0_rel = models.FloatField(db_column='ReL0/ReL', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    agt = models.FloatField(db_column='Agt', blank=True, null=True)  # Field name made lowercase.
-    start = models.TimeField(blank=True, null=True)
-    end = models.TimeField(blank=True, null=True)
-    machine_name = models.CharField(max_length=255, blank=True, null=True)
-    machine_id = models.IntegerField(blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
-    temperature = models.FloatField(blank=True, null=True)
+    d = models.CharField(max_length=255)
+    brand_grade = models.CharField(max_length=255)
+    batch_no = models.CharField(max_length=255, blank=True, null=True)
+    sample_actual_id = models.CharField(max_length=255, blank=True, null=True)
+    reportid = models.IntegerField(db_column='reportID', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'mechanics_exp'
+        db_table = 'original_sample'
 
 
 class Professors(models.Model):
@@ -116,9 +110,34 @@ class Professors(models.Model):
 
 class Sample(models.Model):
     sample_id = models.AutoField(primary_key=True)
-    d = models.IntegerField()
-    brand_grade = models.CharField(max_length=255)
-    batch_no = models.CharField(max_length=255, blank=True, null=True)
+    max_n_after_bre = models.FloatField(db_column='max_N_after_bre', blank=True, null=True)  # Field name made lowercase.
+    max_n_origin = models.FloatField(db_column='max_N_origin', blank=True, null=True)  # Field name made lowercase.
+    post_break_gauge = models.FloatField(db_column='post_break_ gauge', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    origin_gauge = models.FloatField(blank=True, null=True)
+    peak_load = models.FloatField(blank=True, null=True)
+    yeild_load = models.FloatField(blank=True, null=True)
+    rel = models.FloatField(db_column='ReL', blank=True, null=True)  # Field name made lowercase.
+    rm = models.FloatField(db_column='Rm', blank=True, null=True)  # Field name made lowercase.
+    a = models.FloatField(db_column='A', blank=True, null=True)  # Field name made lowercase.
+    rm0_rel0 = models.FloatField(db_column='Rm0/ReL0', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    rel0_rel = models.FloatField(db_column='ReL0/ReL', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    agt = models.FloatField(db_column='Agt', blank=True, null=True)  # Field name made lowercase.
+    start = models.DateTimeField(blank=True, null=True)
+    end = models.DateTimeField(blank=True, null=True)
+    machine_name = models.CharField(max_length=255, blank=True, null=True)
+    machine_id = models.IntegerField(blank=True, null=True)
+    temperature = models.FloatField(blank=True, null=True)
+    get_time = models.DateTimeField(blank=True, null=True)
+    get_people = models.IntegerField(blank=True, null=True)
+    remark = models.CharField(max_length=255, blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    measuring_name = models.CharField(max_length=255, blank=True, null=True)
+    measuring_id = models.IntegerField(blank=True, null=True)
+    d = models.CharField(max_length=255, blank=True, null=True)
+    brand_grade = models.CharField(max_length=255, blank=True, null=True)
+    sample_actual_id = models.CharField(max_length=255, blank=True, null=True)
+    reportid = models.IntegerField(db_column='reportID', blank=True, null=True)  # Field name made lowercase.
+    backup = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False

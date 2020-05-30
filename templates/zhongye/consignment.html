@@ -1,29 +1,66 @@
 <!--收样人员委托单表格-->
-{% extends 'zhongye/base.html' %}
 {% load static from staticfiles %}
-{% block base %}
-  <div style="width: 80%;margin: 0 auto">
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>中冶建筑研究总院有限公司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+
+
+  <script src="{% static 'base/js/tableExport.min.js' %}"></script>
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+
+  <script
+    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
+
+
+</head>
+
+<body>
+
+<!-- Start Welcome area -->
+<div style="height: 50px;width: 100%;background-color: #0044cc;">
+  <span
+    style="float: right;margin-right: 100px;line-height: 50px;color:#ffffff;">{{ request.session.LoginSession.LoginName }}</span>
+</div>
+
+
+<div>
+  <div style="width: 60%;margin: 0 auto">
     <div style="height: 200px;margin: 0 auto">
-      <h3 style="text-align: center;line-height: 200px"><span>收样人员委托单表</span></h3>
+      <h3 style="text-align: center;line-height: 200px">收样人员委托单表</h3>
     </div>
-
-
-    {#<div id="toolbar">#}
-    {#  <button id="remove" class="btn btn-danger" disabled>#}
-    {#    <i class="glyphicon glyphicon-remove"></i> Delete#}
-    {#  </button>#}
-    {#</div>#}
-
     <table id="table"
-           data-toolbar="#toolbar"
-           data-show-refresh="true"
+      {#           data-toolbar="#toolbar"#}
+      {#           data-show-refresh="true"#}
            data-show-fullscreen="true"
-           data-show-export="true"
-           data-show-pagination-switch="true"
-           data-pagination="true"
+      {#           data-show-export="true"#}
+      {#           data-show-pagination-switch="true"#}
+      {#           data-pagination="true"#}
            data-show-print="true"
-           data-id-field="id"
-           data-page-list="[10, 25, 50, 100, all]"
+      {#           data-id-field="id"#}
+      {#           data-page-list="[10, 25, 50, 100, all]"#}
            data-side-pagination="server"
     >
     </table>
@@ -34,371 +71,172 @@
 
       function initTable() {
         $table.bootstrapTable('destroy').bootstrapTable({
-          height: 550,
-          pagination: false,
+          {#height: 550,#}
           locale: 'zh-CN',
           columns: [
             [{
-              title: '报告编号:建钢检字（     ） 第 （     ） 号 ',
-              field: 'id',
-              colspan: 7,
-              align: 'center',
-              valign: 'middle'
-            }], [{
-              title: '委托单位',
-              field: 'clients',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm" >' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'client',
-              colspan: 6,
-              align: 'center'
-            }], [{
               title: '工程名称',
-              field: 'enjNames',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm" >' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'enjName',
-              colspan: 6,
-              align: 'center'
-            }], [{
-              title: '邮寄地址',
-              field: 'EmailAddresss',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm" >' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'EmailAddress',
-              colspan: 4,
-              align: 'center'
-            }, {
-              title: '邮政编码',
-              field: 'postcodes',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm" >' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'postcode',
-              colspan: 1,
-              align: 'center'
-            }], [{
-              title: '委托类型',
-              field: 'deliveryModes',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '   <div class="input-group input-group-sm" style="width: auto" >' +
-                '            <label><input type="checkbox" style="width: 30%">一般</lable' +
-                '            <label ><input type="checkbox" style="width: 30%">见证</lable' +
-                '            <label ><input type="checkbox" style="width: 30%">仲裁</lable' +
-                '            </div>',
-              colspan: 4,
-              align: 'center'
-            }, {
-              title: '委托日期',
-              field: 'dates',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm" >' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'date',
-              colspan: 1,
-              align: 'center'
-            }], [{
-              title: '报告形式',
-              field: 'reportForms',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '   <div class="input-group input-group-sm" style="width: auto" >' +
-                '            <label><input type="checkbox" style="width: 30%">中文报告</lable' +
-                '            <label ><input type="checkbox" style="width: 30%">英文报告</lable' +
-                '            </div>',
-              field: 'reportForm',
-              colspan: 2,
-              align: 'center'
-            }, {
-              title: '发出方式',
-              field: 'givingModes',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '   <div class="input-group input-group-sm" style="width: auto" >' +
-                '            <label><input type="checkbox" style="width: 30%">自取</lable' +
-                '            <label ><input type="checkbox" style="width: 30%">邮寄</lable' +
-                '            </div>',
-              field: 'givingMode',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '联系人',
-              field: 'contacts',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'contact',
-              colspan: 1,
-              align: 'center'
-            }], [{
-              title: '加工方式',
-              field: 'processingModes',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '   <div class="input-group input-group-sm" style="width: auto" >' +
-                '            <label><input type="checkbox" style="width: 30%">中心加工</lable' +
-                '            <label ><input type="checkbox" style="width: 30%">委托方加工</lable' +
-                '            </div>',
-              field: 'processingMode',
-              colspan: 2,
-              align: 'center'
-            }, {
-              title: '代表数量',
-              field: 'representNumbers',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'representNumber',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '联系电话',
-              field: 'contactPhones',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'contactPhone',
-              colspan: 1,
-              align: 'center'
-            }], [{
-              title: '生产厂家',
-              field: 'producers',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'producer',
-              colspan: 4,
-              align: 'center'
-            }, {
-              title: '传真',
-              field: 'faxs',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'fax',
-              colspan: 1,
-              align: 'center'
-            }], [{
-              title: '样品名称',
-              field: 'sampleNames',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'sampleName',
-              colspan: 4,
-              align: 'center'
-            }, {
-              title: '样品状态',
-              field: 'sampleStatuss',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '        <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <input type="text"  class="form-control" placeholder="">' +
-                '        </div>',
-              field: 'sampleStatus',
-              colspan: 1,
-              align: 'center'
-            }], [{
-              title: '检验费用',
-              field: 'prices',
               colspan: 1,
               align: 'center',
               valign: "middle"
             }, {
-              title: '<div class="input-group input-group-sm">' +
-                '            <span class="input-group-addon">金额:</span>' +
-                '            <input type="text" class="form-control">' +
-                '            <span class="input-group-addon">元</span>' +
-                '      </div>',
-              field: 'price',
+              title: '  <a id = "projecy_name">{{ data.project_name }}</a>',
+              field: 'projecy_name',
+              colspan: 5,
+              align: 'center',
+              valign: "middle"
+            }],
+
+            [{
+              title: '委托类型',
+              field: 'deliveryModes',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <span id = "type">{{ data.type }}</a>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '委托日期',
+              field: 'dates',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '    <a id = "date">{{ data.date }}</a>',
+              field: 'date',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }], [{
+              title: '报告形式',
+              field: 'reportForms',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <a id = "presentation">{{ data.presentation }}</a>',
+              field: 'reportForm',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '发出方式',
+              field: 'givingModes',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <a id = "delivery">{{ data.delivery }}</a>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }],
+            [{
+              title: '加工方式',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '  <a id = "processing_method">{{ data.processing_method }}</a>',
+
+              colspan: 2,
+              align: 'center'
+            }, {
+              title: '代表数量',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '   <a id = "number">{{ data.number }}</a>',
+              colspan: 2,
+              align: 'center'
+            }], [{
+              title: '生产厂家',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '   <a id = "manufactory">{{ data.manufactory }}</a>',
+              colspan: 5,
+              align: 'center'
+            }],
+            [{
+              title: '检验费用',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a id = "fee">{{ data.fee }}</a>',
               colspan: 2,
               align: 'center',
               valign: "middle"
             },
               {
                 title: '预交押金',
-                field: 'prices',
-                colspan: 1,
+                colspan: 2,
                 valign: "middle",
                 align: 'center'
-              }, {
-                title: '<div class="input-group input-group-sm">' +
-                  '            <span class="input-group-addon">金额:</span>' +
-                  '            <input type="text" class="form-control">' +
-                  '            <span class="input-group-addon">元</span>' +
-                  '      </div>',
-                field: 'price',
-                colspan: 2,
-                align: 'center',
-                valign: "middle"
               },
               {
-                title: '   <div class="input-group input-group-sm" style="width: auto" >' +
-                  '            <label><input type="checkbox" style="width: 30%">已付</lable' +
-                  '            <label ><input type="checkbox" style="width: 30%">未付</lable' +
-                  '            </div>',
-                field: 'paided',
+                title: '  <a id = "paid">{{ data.paid }}</a>',
                 colspan: 1,
                 valign: "middle",
                 align: 'center'
               }], [{
-              title: '注意事项',
-              field: 'Notice',
-              rowspan: 3,
+              title: '周期：',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a id = "sample_state">{{ data.sample_state }}</a>',
+              colspan: 5,
+              align: 'left',
+              valign: "middle"
+            }], [{
+              title: '送样数量：',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a id = "sample_number">{{ data.sample_number }}</a>',
+
+              colspan: 5,
+              align: 'left',
+              valign: "middle"
+            }], [{
+              title: '检验后样品处理',
+
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a id = "sample_disposal">{{ data.sample_disposal }}</a>',
+              colspan: 5,
+              align: 'left',
+              valign: "middle"
+            }],
+            [{
+              title: '发票信息',
+              colspan: 1,
               align: 'center',
               valign: 'middle',
             }, {
-              title:
-                '   <div class="input-group input-group-sm" style="width: auto" >' +
-                '<span style="margin-left: 10px;margin-right: 20px;"> 周期：</span>' +
-                '            <label><input type="checkbox" style="width: 30%">正常</lable' +
-                '            <label ><input type="checkbox" style="width: 30%">加急</lable' +
-                '            </div>',
-              field: 'isUrgent',
-              colspan: 6,
+              title: '<a id = "invoice">{{ data.invoice }}</a>',
+              colspan: 5,
               align: 'center',
-              valign: "middle"
-            }], [{
-              title:
-                '<div>' +
-                '        <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <input type="text"  class="form-control" placeholder="送样数量">' +
-                '        </div></div>',
-              field: 'givingNumber',
-              colspan: 6,
-              align: 'center'
-            }], [{
-              title: '   <div><div class="input-group input-group-sm" style="width: auto" >' +
-                  '            <label>检验后样品处理：<input type="checkbox" style="width: 30%">由检测方处理</lable' +
-                  '            <label ><input type="checkbox" style="width: 30%">委托方取回（自委托方委托之日起保存十天，逾期不予保存)</lable' +
-                  '            </div></div>',
-              field: 'proposal',
-              colspan: 6,
-              align: 'center',
-              valign: "middle"
-            }], [{
-              title: '发票信息',
-              field: 'invoices',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '   <div><div class="input-group input-group-sm" style="width: auto" >' +
-                  '            <label><input type="checkbox" style="width: 30%">普通发票</lable' +
-                  '            <label ><input type="checkbox" style="width: 30%">增值税发票（请提供增值税发票信息：单位名称、地址、电话、纳税人识别号、账号、开户银行）</lable' +
-                  '            </div></div>',
-              field: 'invoice',
-              colspan: 6,
-              align: 'center'
-            }], [{
-              title: '交货形式',
-              field: 'givingModes',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'givingMode',
-              colspan: 6,
-              align: 'center'
-            }], [{
+              valign: 'middle',
+            }],
+
+            [{
               title: '备注',
-              field: 'remarks',
               colspan: 1,
-              align: 'center'
-            }, {
-              title:  ' <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <textarea type="text"  class="form-control" rows="2"></textarea>' +
-                '       </div>',
-              field: 'remark',
-              colspan: 6,
               align: 'center',
               valign: "middle"
-            }], [{
-              title: '   <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <span class="input-group-addon">委托人:</span><input type="text"  class="form-control" placeholder="送样数量">' +
-                '        </div>',
-              field: 'assigners',
-              colspan: 4,
+            }, {
+              title: ' <a id = "remarks">{{ data.sample_state }}</a>',
+              colspan: 5,
               align: 'center',
-              valign: "middel"
-            }, {
-              title: '   <div class="input-group input-group-sm"  style="width: auto">' +
-                '            <span class="input-group-addon">收样人:</span><input type="text"  class="form-control" placeholder="送样数量">' +
-                '        </div>',
-              field: 'samplePeople1',
-              colspan: 3,
-              align: 'center'
-            }], [{
-              title: '规格型号',
-              field: 'specifications',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '牌号级别',
-              field: 'grades',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '来样编号',
-              field: 'givingSampleId',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '试样编号',
-              field: 'sampleId',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '检验项目及数量',
-              field: 'testItem',
-              colspan: 2,
-              align: 'center'
-            }, {
-              title: '检验依据',
-              field: 'basis',
-              colspan: 1,
-              align: 'center'
+              valign: "middle"
             }]
           ]
         })
@@ -407,11 +245,98 @@
 
       $(function () {
         initTable()
-
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          predend: '委托类型',//编辑框的标题
+          // validate: function (value) { //字段验证
+          //   if (!$.trim(value)) {
+          //     return '不能为空';
+          //   }
+          // }
+          source: [{value: "一般", text: "一般"}, {value: "见证", text: "见证"}, {value: "行政部", text: "行政部"}]
+        })
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          predend: '委托类型',//编辑框的标题
+          // validate: function (value) { //字段验证
+          //   if (!$.trim(value)) {
+          //     return '不能为空';
+          //   }
+          // }
+          source: [{value: "一般", text: "一般"}, {value: "见证", text: "见证"}, {value: "行政部", text: "行政部"}]
+        })
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          predend: '委托类型',//编辑框的标题
+          // validate: function (value) { //字段验证
+          //   if (!$.trim(value)) {
+          //     return '不能为空';
+          //   }
+          // }
+          source: [{value: "一般", text: "一般"}, {value: "见证", text: "见证"}, {value: "行政部", text: "行政部"}]
+        })
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          predend: '委托类型',//编辑框的标题
+          // validate: function (value) { //字段验证
+          //   if (!$.trim(value)) {
+          //     return '不能为空';
+          //   }
+          // }
+          source: [{value: "一般", text: "一般"}, {value: "见证", text: "见证"}, {value: "行政部", text: "行政部"}]
+        })
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          predend: '委托类型',//编辑框的标题
+          // validate: function (value) { //字段验证
+          //   if (!$.trim(value)) {
+          //     return '不能为空';
+          //   }
+          // }
+          source: [{value: "一般", text: "一般"}, {value: "见证", text: "见证"}, {value: "行政部", text: "行政部"}]
+        })
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          predend: '委托类型',//编辑框的标题
+          // validate: function (value) { //字段验证
+          //   if (!$.trim(value)) {
+          //     return '不能为空';
+          //   }
+          // }
+          source: [{value: "一般", text: "一般"}, {value: "见证", text: "见证"}, {value: "行政部", text: "行政部"}]
+        })
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          predend: '委托类型',//编辑框的标题
+          // validate: function (value) { //字段验证
+          //   if (!$.trim(value)) {
+          //     return '不能为空';
+          //   }
+          // }
+          source: [{value: "一般", text: "一般"}, {value: "见证", text: "见证"}, {value: "行政部", text: "行政部"}]
+        })
+        $("#date").editable({
+          type: "date",
+          title: "委托日期"
+        })
+        $("#remarks").editable({
+          type: "textarea",
+          title: "备注",
+          rows: 3,
+        })
+        $("#invoice").editable()
 
       })
     </script>
+    <script></script>
   </div>
 
+</div>
+<footer>
+  {% include 'zhongye/footer.html' %}
+</footer>
+{##}
+{#<script src="{% static 'consignment/js/consignment.js' %}"></script>#}
+</body>
 
-{% endblock base %}
+</html>

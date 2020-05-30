@@ -2,28 +2,35 @@
 
 {% extends 'zhongye/base.html' %}
 {% load static from staticfiles %}
+
 {% block base %}
   <div style="width: 80%;margin: 0 auto">
     <div style="height: 200px;margin: 0 auto">
       <h3 style="text-align: center;line-height: 200px"><span>收样人员首页表</span></h3>
     </div>
-
+    <div id="toolbar">
+      <form method="post" action="/sample_index/updateCommissionSheet/">
+        <input id="create" type="submit" class="btn btn-primary" value="添加">
+      </form>
+    </div>
     <table
       id="table"
+      data-toolbar="#toolbar"
       data-search="true"
       data-show-refresh="true"
-      data-show-toggle="true"
+      data-show-print="true"
+      {#      data-show-toggle="true"#}
       data-show-fullscreen="true"
-      data-show-columns="true"
-      data-show-columns-toggle-all="true"
-      data-show-export="true"
-      data-click-to-select="true"
-      data-minimum-count-columns="2"
+      {#      data-show-columns="true"#}
+      {#      data-show-columns-toggle-all="true"#}
+      {#      data-show-export="true"#}
+      {#      data-click-to-select="true"#}
+      {#      data-minimum-count-columns="2"#}
       data-show-pagination-switch="true"
       data-pagination="true"
       data-id-field="id"
       data-page-list="[10, 25, 50, 100, all]"
-      data-show-footer="true"
+      {#      data-show-footer="true"#}
       data-side-pagination="server"
     >
     </table>
@@ -32,90 +39,147 @@
       var $table = $('#table')
 
       function initTable() {
-        $table.bootstrapTable({
+        $table.bootstrapTable('destroy').bootstrapTable({
           {#height: 650,#}
           locale: 'zh-CN',
           url: "/samIndexData/",
 
           method: "GET",
           columns: [
-            {#{#}
-            {#  field: 'state',#}
-            {#  checkbox: true,#}
-            {#  align: 'center',#}
-            {#  valign: 'middle'#}
-
+            {
+              title: 'id',
+              field: 'id',
+              align: 'center',
+              visible:false,
+              valign: 'middle',
+              sortable: true,
+            },
             {
               title: '报告编号',
-              field: 'sample_id',
+              field: 'report_id',
               align: 'center',
               valign: 'middle',
               {#sortable: true,#}
-              editable: {
-                type: "text",
-                title: "报告编号",
-                validate: function (value) {
-                  if (!value) {
-                    return '报告编号不能为空';
-
-                  }
-                }
-
-              }
             }, {
               title: '委托单位',
               field: 'company_name',
               align: 'center',
               valign: 'middle',
-              sortable: true,
-            }, {
+              formatter: companyName
+            },
+
+            {
               title: '工程名称',
               field: 'project_name',
               align: 'center',
               valign: 'middle',
-              sortable: true,
+              editable: {
+                type: "text",
+                title: "工程名称",
+                placeholder:'工程名称',
+                validate: function (value) {
+                  if (!value) {
+                    return '工程名称不能为空';
+                  }
+                },
+
+              }
+            },{
+              title: '委托日期',
+              field: 'date',
+              align: 'center',
+              valign: 'middle',
+              {#editable: {#}
+              {#  title:"委托日期",#}
+              {#  type:"datetime",#}
+
             }, {
-              field: 'operate',
               title: '操作',
               align: 'center',
-              events: window.operateEvents,
+              print:false,
+              valign: "middle",
+              width: 200,
               formatter: operateFormatter
             }
-          ]
-        })
+          ],
+          onEditableSave: function (field, row, oldValue, $el) {
+            $.ajax({
+              type: "post",
+              url: "/sample_index/updateCommissionSheet/",
+              data: {"id":row.id,"project_name":row.project_name},
+              success: function (data, status) {
+                if (status == "success") {
 
+                  initTable();
+                }
+              },
+              error: function () {
+                alert('编辑失败');
+              },
+              complete: function () {
+
+              }
+
+            });
+          }
+        })
+      }
+
+      function companyName(value, row, index) {
+        {#console.log(row.id)#}
+        return [
+          "<div id='" + row.id + "' style='cursor: pointer;' onclick='company(this.id)'><span>",
+          value,
+          "</span></div>"
+        ].join("")
+
+      }
+
+      function company(id) {
+        layer.open({
+          type: 2,
+          title: '委托单位信息管理',
+          maxmin: true,
+          shadeClose: true, //点击遮罩关闭层
+          area: ['70%', '850px'],
+          content: '/sample_index/companyAdmin/?id=' + id
+        });
+      }
+
+      function report(id) {
+        layer.open({
+          type: 2,
+          title: '报告信息',
+          maxmin: true,
+          shadeClose: true, //点击遮罩关闭层
+          area: ['60%', '700px'],
+          content: '/sample_index/report/?id=' + id
+        });
+      }
+
+      function sample(id) {
+        layer.open({
+          type: 2,
+          title: '试样信息',
+          maxmin: true,
+          shadeClose: true, //点击遮罩关闭层
+          area: ['60%', '700px'],
+          content: '/sample_index/sample/?id=' + id
+        });
       }
 
       function operateFormatter(value, row, index) {
         return [
-          '<form name="form" method="post" action="/consignment/">',
-          '<input type = "hidden" value = "',
-          row.sample_id,
-          '" >',
-          '<input type="submit" name="Submit" value="开始">',
-          '</form>',
+
+          '<input type="button" onclick="sample('+row.id+')" class="btn btn-info btn-sm" value="试样信息">',
+
+          '<input type="button" onclick="report('+row.id+')" style="margin-left:10px;" class="btn btn-primary btn-sm" value="报告信息">',
         ].join('')
       }
 
-      window.operateEvents = {
-        'click .begin': function (e, value, row, index) {
-          $.ajax({
-            method: "POST",
-            data: {"sample_id": row.sample_id},
-            url: "/toConsignment/",
-            success: function (result) {
-              {#console.log(jQuery.parseJSON(result))#}
 
-            },
-            error: function (result) {
-
-            }
-          })
-        }
-      }
       $(function () {
         initTable()
-
       })
     </script>
   </div>

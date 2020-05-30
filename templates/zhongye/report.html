@@ -1,0 +1,430 @@
+<!--收样人员委托单表格-->
+{% load static from staticfiles %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>中冶建筑研究总院有限公司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+  {#  <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css"#}
+  {#        rel="stylesheet">#}
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <link rel="stylesheet" href="{% static 'report/css/bootstrap-datetimepicker.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+  <script src="{% static 'base/js/common.js' %}"></script>
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  {#  <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>#}
+  {#  <script#}
+  {#    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.zh-CN.min.js"></script>#}
+  <script src="{% static 'report/js/bootstrap-datetimepicker.js' %}"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+  <script
+    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
+
+
+</head>
+
+<body>
+
+
+<div>
+  <div style="width: 90%;margin:0 auto;">
+    <table id="table"
+           data-show-fullscreen="true"
+           data-show-print="true"
+    >
+    </table>
+    <script>
+      var $table = $('#table')
+
+      function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+          {#height: 650,#}
+          pagination: false,
+          locale: 'zh-CN',
+          columns: [
+            [{
+              title: '工程名称',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '  <a  href="#" id = "project_name" data-type="text" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.project_name }}</a>',
+              colspan: 5,
+              align: 'center',
+              valign: "middle"
+            }],
+
+            [{
+              title: '委托类型',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <a href="#" id = "type"  data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/" >{{ data.type }}</a>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '委托日期',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a href="#" id="date" data-type="datetime"  data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/" title="委托日期">{{ data.date }}</a>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }], [{
+              title: '报告形式',
+
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <a href="#"  id = "presentation" data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.presentation }}</a>',
+
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '发出方式',
+
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '   <a href="#"  id = "delivery" data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.delivery }}</a>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            }],
+            [{
+              title: '加工方式',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '  <a href="#"  id = "processing_method" data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.processing_method }}</a>',
+
+              colspan: 2,
+              align: 'center'
+            }, {
+              title: '代表数量',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '   <a href="#"  id = "sample_number" data-type="text" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.sample_number }}</a>',
+              colspan: 2,
+              align: 'center'
+            }], [{
+              title: '生产厂家',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '   <a href="#"  id = "manufactory" data-type="text" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.manufactory }}</a>',
+              colspan: 5,
+              align: 'center'
+            }],
+            [{
+              title: '检验费用',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a href="#"  id = "fee" data-type="text" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.fee }}</a>',
+              colspan: 2,
+              align: 'center',
+              valign: "middle"
+            },
+              {
+                title: '预交押金',
+                colspan: 2,
+                valign: "middle",
+                align: 'center'
+              },
+              {
+                title: '  <a href="#"  id = "deposit" data-type="text" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.deposit }}</a>',
+                colspan: 1,
+                valign: "middle",
+                align: 'center'
+              }], [{
+              title: '周期',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a href="#"  id = "sample_state" data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.sample_state }}</a>',
+              colspan: 5,
+              align: 'center',
+              valign: "middle"
+            }], [{
+              title: '送样数量：',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a href="#"  id = "number" data-type="text" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.number }}</a>',
+              colspan: 5,
+              align: 'center',
+              valign: "middle"
+            }], [{
+              title: '检验后样品处理',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: '<a href="#"  id = "sample_disposal" data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.sample_disposal }}</a>',
+              colspan: 5,
+              align: 'center',
+              valign: "middle"
+            }],
+            [{
+              title: '发票信息',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle',
+            }, {
+              title: '<a href="#"  id = "invoice" data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.invoice }}</a>',
+              colspan: 5,
+              align: 'center',
+              valign: 'middle',
+            }],
+
+            [{
+              title: '备注',
+              colspan: 1,
+              align: 'center',
+              valign: "middle"
+            }, {
+              title: ' <a href="#"  id = "remarks" data-type="textarea" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.remarks }}</a>',
+              colspan: 5,
+              align: 'center',
+              valign: "middle"
+            }]
+          ]
+        })
+      }
+
+      $(function () {
+        initTable()
+      })
+      $(document).ready(function () {
+        editable()
+      })
+
+      function editable() {
+        $("#type").editable({
+          type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等
+          autotext: "auto",
+          defaultValue: "委托类型",
+          source: [{value: "1", text: "一般"}, {value: "2", text: "见证"}, {value: "3", text: "仲裁"}],
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#project_name").editable({
+          //编辑框的类型。支持text|textarea|select|date|checklist等
+          title: "工程名字",
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#number").editable({
+
+          {#placement: "bottom",#}
+          {#showbuttons:"bottom",#}
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#deposit").editable({
+          showbuttons:"bottom",
+          {#defaultValue: "样品数量",#}
+          {#source: [{value: "1", text: "1"}, {value: "2", text: "5"}, {value: "3", text: "10"}],#}
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#delivery").editable({
+          {#type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
+          title: '发出方式',//编辑框的标题
+          source: [{value: "1", text: "自取"}, {value: "2", text: "邮寄"}],
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#processing_method").editable({
+          {#type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
+          source: [{value: "1", text: "中心加工"}, {value: "2", text: "委托方加工"}],
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#presentation").editable({
+          {#type: "select",    //编辑框的类型。支持text|textarea|select|date|checklist等#}
+          source: [{value: "1", text: "中文报告"}, {value: "2", text: "英文报告"}],
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#sample_disposal").editable({
+          {#type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
+          source: [{value: "1", text: "由检方处理"}, {value: "2", text: "委托方取回"}],
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+
+        $("#date").editable({
+          viewformat: 'yyyy/mm/dd hh:ii',
+          url: "/sample_index/updateCommissionSheetReport/",
+          pk: getQueryString("id"),
+          showbuttons: "bottom",
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        }),
+
+
+          $("#remarks").editable({
+            {#type: "textarea",#}
+            title: "备注",
+            placement:"top",
+            validate: function (value) {
+              if ($.trim(value) == '') {
+                return 'This field is required';
+              }
+            },
+            success: function (value) {
+              window.parent.initTable()
+            }
+          })
+        $("#invoice").editable({
+
+          source: [{value: "1", text: "普通发票"}, {value: "2", text: "增值税发票"}, {value: "3", text: "不开票"}],
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+
+        $("#manufactory").editable({
+          {#type: "text",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
+          placehoder: "生产厂家",
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#sample_number").editable({
+          {#type: "text",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
+          showbuttons:"bottom",
+          validate: function (value) {
+            if (isNaN(value)) {
+              return '输入错误';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#fee").editable({
+          {#type: "text",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
+          placehoder: "费用",
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+        $("#sample_state").editable({
+          {#type: "text",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
+          source:[{value:1,text:"正常"},{value:2,text:"加急"}],
+          validate: function (value) {
+            if ($.trim(value) == '') {
+              return 'This field is required';
+            }
+          },
+          success: function (value) {
+            window.parent.initTable()
+          }
+        })
+      }
+    </script>
+    <script></script>
+  </div>
+</div>
+</body>
+
+</html>
