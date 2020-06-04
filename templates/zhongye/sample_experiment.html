@@ -1,0 +1,255 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  {#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  {#  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">#}
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+
+  {#    <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">#}
+  {#  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">#}
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  {#  <link rel="stylesheet" href="{% static 'base/css/bootstrap-select.min.css' %}">#}
+  {#  <link rel="stylesheet" href="{% static 'base/css/bootstrap-select.min.css' %}">#}
+
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <style>
+    body {
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#"></a>
+    </div>
+  </div>
+</nav>
+
+<div style="width: 95%;margin:0 auto;">
+  <table
+    id="table"
+    data-show-refresh="true"
+    data-show-fullscreen="true"
+    data-show-pagination-switch="true"
+    data-pagination="true"
+    data-id-field="id"
+    data-page-list="[10, 25, 50, 100, all]"
+    {#    data-side-pagination="server"#}
+  >
+  </table>
+</div>
+
+<script src="{% static 'base/js/jquery.min.js' %}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.js"></script>
+<script src="{% static 'base/js/layer.js' %}"></script>
+<script src="{% static 'base/js/popper.min.js' %}"></script>
+{#<script src="{% static 'base/js/bootstrap-editable.js' %}"></script>#}
+<script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+<script src="{% static 'base/js/common.js' %}"></script>
+{#<script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+<script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+{#<script src="{% static 'base/js/bootstrap-select.min.js' %}"></script>#}
+
+
+<script>
+
+  var $table = $('#table')
+  var columns = [{
+    field: "id",
+    title: "id",
+    visible: false
+  },
+    {
+      field: "sample_id",
+      title: "规格",
+      visible: false
+    }, {
+      field: "sample_number",
+      title: "试样编号",
+      align: "center",
+      valign: "middle",
+    }, {
+      field: "lashen",
+      title: "拉伸",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='lashen' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='lashen' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "wanqu",
+      title: "弯曲",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='wanqu' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='wanqu' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "fanwan",
+      title: "反弯",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='fanwan' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='fanwan' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "huaxue",
+      title: "化学",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='huaxue' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='huaxue' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "jinxiang",
+      title: "金相",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='jinxiang' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='jinxiang' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "chicun",
+      title: "尺寸",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='chicun' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='chicun' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "biaomianbiaozhi",
+      title: "表面</br>标志",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='biaomianbiaozhi' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='biaomianbiaozhi' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "zhongliangpiancha",
+      title: "重量</br>偏差",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='zhongliangpiancha' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='zhongliangpiancha' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "biaomianzhiliang",
+      title: "表面</br>质量",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked type ='checkbox' id = '" + row.id + "' name='biaomianzhiliang' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='biaomianzhiliang' onclick='change(this)'>"
+        }
+      }
+    }, {
+      field: "ceq",
+      title: "ceq",
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        if (value == 1) {
+          return "<input checked id = '" + row.id + "'type ='checkbox' name='ceq' onclick='change(this)'>"
+        } else {
+          return "<input  type ='checkbox' id = '" + row.id + "' name='ceq' onclick='change(this)'>"
+        }
+      }
+    }
+  ]
+
+  function change(that) {
+    {#layer.alert(that.checked)#}
+    var data = {}
+    data["id"] = that.id;
+    data[that.name] = that.checked ? 1 : 0
+    $.ajax({
+      data: data,
+      url: "/sample_index/updateExperiment/",
+      type: "POST",
+      success: function () {
+
+      },
+      error: function () {
+
+      }
+    })
+  }
+
+  function initTable() {
+    $table.bootstrapTable("destroy").bootstrapTable({
+      columns: columns,
+      url: "/sample_index/loadExperimentData/?sample_id=" + getQueryString("sample_id"),
+      method: "GET",
+      pageSize:5
+    })
+  }
+
+  function operateFormatter(value, row, index) {
+    return [
+      '<input type="button" onclick="sample(' + row + ')" class="btn btn-info btn-sm" value="生成编号">'
+    ].join('')
+  }
+
+  $(function () {
+    {#buildTable($table, 8, 2)#}
+    initTable()
+
+  })
+
+  $(document).ready(function () {
+    $("input").on('click', function () {
+
+    })
+  })
+
+
+</script>
+</body>
+</html>

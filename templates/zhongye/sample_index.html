@@ -5,8 +5,8 @@
 
 {% block base %}
   <div style="width: 80%;margin: 0 auto">
-    <div style="height: 200px;margin: 0 auto">
-      <h3 style="text-align: center;line-height: 200px"><span>收样人员首页表</span></h3>
+    <div style="height: 180px;margin: 0 auto">
+      <h3 style="text-align: center;line-height: 180px"><span>收样人员首页表</span></h3>
     </div>
     <div id="toolbar">
       <form method="post" action="/sample_index/updateCommissionSheet/">
@@ -19,13 +19,7 @@
       data-search="true"
       data-show-refresh="true"
       data-show-print="true"
-      {#      data-show-toggle="true"#}
       data-show-fullscreen="true"
-      {#      data-show-columns="true"#}
-      {#      data-show-columns-toggle-all="true"#}
-      {#      data-show-export="true"#}
-      {#      data-click-to-select="true"#}
-      {#      data-minimum-count-columns="2"#}
       data-show-pagination-switch="true"
       data-pagination="true"
       data-id-field="id"
@@ -40,8 +34,8 @@
 
       function initTable() {
         $table.bootstrapTable('destroy').bootstrapTable({
-          {#height: 650,#}
-          locale: 'zh-CN',
+          height: 727,
+          locale: 'zh- CN',
           url: "/samIndexData/",
 
           method: "GET",
@@ -152,7 +146,7 @@
           title: '报告信息',
           maxmin: true,
           shadeClose: true, //点击遮罩关闭层
-          area: ['60%', '700px'],
+          area: ['60%', '650px'],
           content: '/sample_index/report/?id=' + id
         });
       }
@@ -163,7 +157,7 @@
           title: '试样信息',
           maxmin: true,
           shadeClose: true, //点击遮罩关闭层
-          area: ['60%', '700px'],
+          area: ['80%', '700px'],
           content: '/sample_index/sample/?id=' + id
         });
       }

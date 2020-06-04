@@ -71,6 +71,25 @@ class CommissionSheet(models.Model):
         db_table = 'commission_sheet'
 
 
+class Experiment(models.Model):
+    sample_id = models.IntegerField()
+    sample_number = models.CharField(max_length=50)
+    lashen = models.IntegerField(blank=True, null=True)
+    wanqu = models.IntegerField(blank=True, null=True)
+    fanwan = models.IntegerField(blank=True, null=True)
+    huaxue = models.IntegerField(blank=True, null=True)
+    jinxiang = models.IntegerField(blank=True, null=True)
+    chicun = models.IntegerField(blank=True, null=True)
+    biaomianbiaozhi = models.IntegerField(blank=True, null=True)
+    zhongliangpiancha = models.IntegerField(blank=True, null=True)
+    biaomianzhiliang = models.IntegerField(blank=True, null=True)
+    ceq = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'experiment'
+
+
 class OriginalSample(models.Model):
     sample_id = models.AutoField(primary_key=True)
     d = models.CharField(max_length=255)
@@ -138,6 +157,9 @@ class Sample(models.Model):
     sample_actual_id = models.CharField(max_length=255, blank=True, null=True)
     reportid = models.IntegerField(db_column='reportID', blank=True, null=True)  # Field name made lowercase.
     backup = models.CharField(max_length=255, blank=True, null=True)
+    laiyang_id = models.CharField(max_length=20, blank=True, null=True)
+    number = models.IntegerField(blank=True, null=True)
+    product_number = models.CharField(max_length=10, blank=True, null=True)
 
     class Meta:
         managed = False

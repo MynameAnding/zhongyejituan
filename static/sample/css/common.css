@@ -1,0 +1,26 @@
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+	color: #CBCBCB;
+}
+
+.layui-layer-page .layui-layer-content {
+	overflow: visible;
+}
+
+.close-btn {
+	position: absolute;
+	top: -25px;
+	width: 50px;
+	height: 50px;
+	background-color: rgb(52, 200, 238);
+	border-radius: 50%;
+	border: none;
+	outline: none;
+	color: white;
+	font-size: 40px;
+	line-height: 1.1;
+}
+
+textarea {
+	resize: none;
+}
