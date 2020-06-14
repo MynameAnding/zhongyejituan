@@ -32,8 +32,6 @@
   {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
   <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
   {#  <script src="{% static 'base/js/layer.js' %}"></script>#}
-  <script
-    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
 
 
 </head>
@@ -96,7 +94,7 @@
   }
 
   companyDict = {
-    "id": "编号",
+    "company_id": "编号",
     'contactor': '联系人',
     'mobile': '联系电话',
     'address': '邮寄地址',
@@ -151,7 +149,7 @@
       {#'<form " method="POST" action="/sample_index/updateCommissionSheet/">',#}
       {#'<input name = "id" type = "hidden" value = "' + getQueryString("id") + '" >',#}
       {#'<input name = "company_name" type = "hidden" value = "' + row.company_name + '" >',#}
-      '<input type="button" onclick="shiyong(',row.id,",'",row.company_name,"'",')" class="btn btn-info btn-sm" value="使用">',
+      '<input type="button" onclick="shiyong(',row.company_id,",'",row.company_name,"'",')" class="btn btn-info btn-sm" value="使用">',
       {#'</form>',#}
     ].join('')
   }
@@ -180,7 +178,7 @@
       columns: [
         [{
           title: '编号',
-          field: 'id',
+          field: 'company_id',
           align: 'center',
           valign: 'middle'
         },

@@ -1,0 +1,269 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  {#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
+{#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">#}
+  <link rel="stylesheet" href="{% static 'sample/css/bootstrap4.1.0.min.css' %}">
+  <link rel="stylesheet" href="{% static 'sample/css/font-awesome4.7.0.min.css'%}">
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+
+  {#    <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">#}
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-select.min.css' %}">
+  {#  <link rel="stylesheet" href="{% static 'base/css/bootstrap-select.min.css' %}">#}
+
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <style>
+    body {
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#"></a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <form class="form-row" role="form">
+    <div class="col-lg-4 form-inline">
+      <label for="sample_name">样品名称：</label>
+      <select class="selectpicker form-control" id="sample_name" data-container="body" title="{{ data.sample_name }}"
+              data-hide-disabled="true">
+        <option value="热轧光圆钢筋">热轧光圆钢筋</option>
+        <option value="热轧带肋钢筋">热轧带肋钢筋</option>
+      </select>
+    </div>
+    <div class="col-lg-4 form-inline">
+      <label for="sample_statue">样品状态：</label>
+      <select class="selectpicker form-control" id="sample_statue" data-container="body"
+              title="{{ data.sample_statue }}"  data-hide-disabled="true">
+        <option value="正常">正常</option>
+        <option value="异常">异常</option>
+      </select>
+    </div>
+    <div class="col-lg-4 form-inline">
+      <label for="test_basis">检验依据：</label>
+      <input type="text" name="test_basis" id="test_basis" class="form-control" value="{{ data.test_basis }}">
+    </div>
+
+  </form>
+</div>
+
+
+<div id="toolbar">
+  <input id="create" type="button" class="btn btn-primary" value="添加">
+</div>
+<div style="width: 95%;margin:0 auto;">
+  <table
+    id="table"
+    data-toolbar="#toolbar"
+    {#    data-search="true"#}
+    data-show-refresh="true"
+    data-show-print="true"
+    data-show-fullscreen="true"
+    data-show-pagination-switch="true"
+    data-pagination="true"
+    data-id-field="id"
+    data-page-list="[6,10, 25, 50, 100, all]"
+{#    data-detail-view="true"#}
+    data-side-pagination="server"
+  >
+  </table>
+</div>
+
+<script src="{% static 'base/js/jquery.min.js' %}"></script>
+<script src="{% static 'sample/js/bootstrap4.1.0.bundle.js' %}"></script>
+<script src="{% static 'base/js/layer.js' %}"></script>
+<script src="{% static 'base/js/popper.min.js' %}"></script>
+<script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+<script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+<script src="{% static 'base/js/common.js' %}"></script>
+<script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>
+<script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+<script src="{% static 'base/js/bootstrap-select.min.js' %}"></script>
+
+
+<script>
+
+
+  var $table = $('#table')
+  var columns = [{
+    field: "sheet_id",
+    title: "sheet_id",
+    visible: false
+  },{
+    field: "sample_id",
+    title: "sample_id",
+    visible: false
+  },
+    {
+      field: "d",
+      title: "规格",
+      align: "center",
+      valign: "middle",
+      editable: {
+        type: "select",
+        source: [{value: "6mm", text: "6mm"}, {value: "8mm", text: "8mm"}]
+      }
+    }, {
+      field: "brand_grade",
+      title: "牌号级别",
+      align: "center",
+      valign: "middle",
+      editable: {
+        type: "select",
+        source: [{value: "HPB300", text: "HPB300"}, {value: "HPB400", text: "HPB400"}, {
+          value: "HPB400E",
+          text: "HPB400E"
+        }]
+      }
+    }, {
+      field: "laiyang_id",
+      title: "来样编号",
+      align: "center",
+      valign: "middle",
+      editable: {
+        type: "text",
+      }
+    }, {
+      field: "sample_number",
+      title: "数量",
+      align: "center",
+      valign: "middle",
+      editable: {
+        type: "text",
+        defaultValue:""
+      }
+    }, {
+      field: "product_number",
+      title: "产品批号",
+      align: "center",
+      valign: "middle",
+      editable: {
+        type: "text"
+      }
+    }, {
+      title: '操作',
+      align: 'center',
+      print: false,
+      valign: "middle",
+      formatter: operateFormatter
+    }
+  ]
+
+  function initTable() {
+    $table.bootstrapTable("destroy").bootstrapTable({
+      columns: columns,
+      url: "/sample_index/loadSampleData/?sheet_id="+getQueryString("sheet_id"),
+      method: "get",
+      pageSize:6,
+      onEditableSave: function (field, row, oldValue, $el) {
+        var data = {"sample_id": row.sample_id, "sheet_id": getQueryString("sheet_id")};
+        data[field] = row[field]
+        $.ajax({
+          type: "POST",
+          url: "/sample_index/updateSample/",
+          data: data,
+          success: function (status) {
+            initTable();
+          },
+          error: function () {
+            alert('编辑失败');
+          },
+          complete: function () {
+          }
+        });
+      },
+    })
+  }
+
+  function operateFormatter(value, row, index) {
+    var laiyang_id = row.laiyang_id;
+    return [
+      '<input type="button" onclick="sample(', row.sample_id,',',row.sample_number,',',"'",laiyang_id,"'",')" class="btn btn-info btn-sm" value="生成编号">'
+    ].join('')
+  }
+
+  function sample(sample_id,number,laiyang_id) {
+    if(laiyang_id==""){
+      layer.alert("来样编号不能为空！")
+      return
+    }
+    var reg = new RegExp("^[0-9]*$");
+ {#if(!reg.test(obj.value)) alert("请输入数字!");#}
+    if( !reg.test(number)){
+      layer.alert("请在数量中输入合法数字！")
+      return
+    }
+    else if(number<=0){
+      layer.alert("数量不能小于0！")
+      return
+    }else if(number>=20){
+      layer.alert("请在数量中输入合法数字！")
+      return
+    }
+    $.ajax({
+      data: {"sample_id": sample_id, "number": number, "sample_number": laiyang_id},
+      url: "/sample_index/updateExperiment/",
+      type: "POST",
+      success: function (result) {
+        experiment(sample_id)
+      },
+      error: function () {
+        layer.alert("生成编号失败!")
+      }
+    })
+  }
+
+  function experiment(sample_id) {
+    layer.open({
+      type: 2,
+      area: ['70%', '600px'],
+      fixed: false, //不固定
+      maxmin: true,
+      content: '/sample_index/sample_experiment/?sample_id='+sample_id,
+    });
+  }
+
+  $(document).ready(function () {
+    $("#create").on("click", function () {
+      $.ajax({
+        url: "/sample_index/updateSample/",
+        method: "POST",
+        data: {"sheet_id": getQueryString("sheet_id")},
+        success: function () {
+          initTable()
+        },
+        error: function () {
+          layer.alert("添加失败!")
+        }
+      })
+    })
+  })
+
+  $(function () {
+
+    initTable()
+
+  })
+
+
+</script>
+</body>
+</html>

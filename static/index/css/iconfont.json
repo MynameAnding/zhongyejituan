@@ -1,0 +1,44 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "354042",
+      "name": "层级分配",
+      "font_class": "three-people",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "410559",
+      "name": "审批",
+      "font_class": "shenpi",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "10593743",
+      "name": "多人,团队,单色,用户_jurassic",
+      "font_class": "jurassic_users",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
+      "icon_id": "11758263",
+      "name": "文件夹",
+      "font_class": "wenjianjia",
+      "unicode": "e761",
+      "unicode_decimal": 59233
+    },
+    {
+      "icon_id": "12331666",
+      "name": "定期试验",
+      "font_class": "dingqishiyan",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    }
+  ]
+}

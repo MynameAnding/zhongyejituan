@@ -1,13 +1,39 @@
 <!--收样人员首页表-->
 
-{% extends 'zhongye/base.html' %}
+{#{% extends 'zhongye/base.html' %}#}
 {% load static from staticfiles %}
 
-{% block base %}
-  <div style="width: 80%;margin: 0 auto">
-    <div style="height: 180px;margin: 0 auto">
-      <h3 style="text-align: center;line-height: 180px"><span>收样人员首页表</span></h3>
-    </div>
+
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+
+  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>
+
+
+  <script src="{% static 'base/js/tableExport.min.js' %}"></script>
+{#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+<script
+    src="{% static 'base/js/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table-print.min.js'%}"></script>
+
+
+  <div style="width: 90%;margin: 0 auto;margin-top: 200px;">
     <div id="toolbar">
       <form method="post" action="/sample_index/updateCommissionSheet/">
         <input id="create" type="submit" class="btn btn-primary" value="添加">
@@ -37,16 +63,11 @@
           height: 727,
           locale: 'zh- CN',
           url: "/samIndexData/",
-
           method: "GET",
           columns: [
             {
-              title: 'id',
               field: 'id',
-              align: 'center',
               visible:false,
-              valign: 'middle',
-              sortable: true,
             },
             {
               title: '报告编号',
@@ -111,9 +132,7 @@
                 alert('编辑失败');
               },
               complete: function () {
-
               }
-
             });
           }
         })
@@ -155,18 +174,15 @@
         layer.open({
           type: 2,
           title: '试样信息',
-          maxmin: true,
           shadeClose: true, //点击遮罩关闭层
           area: ['80%', '700px'],
-          content: '/sample_index/sample/?id=' + id
+          content: encodeURI('/sample_index/sample/?sheet_id=' + id)
         });
       }
 
       function operateFormatter(value, row, index) {
         return [
-
           '<input type="button" onclick="sample('+row.id+')" class="btn btn-info btn-sm" value="试样信息">',
-
           '<input type="button" onclick="report('+row.id+')" style="margin-left:10px;" class="btn btn-primary btn-sm" value="报告信息">',
         ].join('')
       }
@@ -178,5 +194,3 @@
     </script>
   </div>
 
-
-{% endblock base %}
