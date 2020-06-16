@@ -1,0 +1,255 @@
+{% load static %}
+
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <title>中冶建筑研究总院有限公司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+    <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+
+  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>
+
+
+  <script src="{% static 'base/js/tableExport.min.js' %}"></script>
+{#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
+  <link rel="stylesheet" href="{% static 'flexbox/jelly.css' %}">
+
+
+</head>
+
+<body>
+
+<div style="width: 90%;margin: 0 auto">
+
+
+<table
+  id="table"
+
+  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
+{#  data-response-handler="responseHandler">#}
+        style="margin-top: 20px;"
+    >
+</table>
+
+
+<script>
+    var $table = $('#table');
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+          {#height: 750,#}
+          locale: 'zh-CN',
+          url: "/PrintExpData/?userID=" + {{ userID }},
+          onloadend:initForm(),
+          columns: [
+            [{
+              title: '设备名称',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '<span id="machine_name"></span>',
+              colspan: 3,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '设备编号',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '<span id="machine_id"></span>',
+              colspan: 3,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '试验日期',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '<span id="date"></span>',
+              colspan: 3,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '室温',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '<span id="temperature"></span>',
+              colspan: 2,
+              align: 'center',
+              valign: 'middle'
+            }],[{
+              title: '试验开始',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '<span id="start"></span>',
+              colspan: 3,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '试验结束',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '<span id="end"></span>',
+              colspan: 3,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '',
+              colspan: 7,
+              align: 'center',
+              valign: 'middle'
+            }], [{
+              title: '试样编号',
+              field: 'sample_actual_id',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '钢号级别',
+              field: 'brand_grade',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '规格',
+              field: 'd',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '屈服负荷<br>kN<br>FP0.2',
+              field: 'yeild_load',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '屈服强度<br>MPa<br>Rp0.2',
+              field: 'rel',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '最大<br>负荷<br>kN<br>Fm',
+              field: 'peak_load',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '抗拉<br>强度<br>MPa<br>Rm',
+              field: 'rm',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '原始<br>标距<br>mm',
+              field: 'origin_gauge',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '断后<br>标距<br>mm',
+              field: 'post_break_gauge',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },  {
+              title: '伸长率<br>%',
+              field: 'a',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '最大力<br>原始<br>标距<br>mm',
+              field: 'max_n_origin',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '最大力<br>断后<br>标距<br>mm',
+              field: 'max_n_after_bre',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '最大力<br>总延<br>伸率<br>%',
+              field: 'agt',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '强屈比',
+              field: 'rm0_rel0',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '屈屈比',
+              field: 'rel0_rel',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }]
+          ]
+        })
+
+    }
+    function initForm(){
+        {#console.log($("#weituodan").innerText)#}
+        $.ajax({
+          type:"get",
+          url:"/LoadExpInformation/?userID=" + {{ userID }},
+          success:function(result) {
+              console.log(jQuery.parseJSON(result));
+            result = jQuery.parseJSON(result);
+            for(var key in result["data"][0]){
+              console.log(key,result["data"][0][key]);
+              $("#"+key).append(result["data"][0][key]);
+            }
+          },
+          error:function(result){
+
+          }
+        })
+    }
+
+  $(function() {
+    initTable();
+  })
+</script>
+</div>
+</div>
+</body>
+</html>

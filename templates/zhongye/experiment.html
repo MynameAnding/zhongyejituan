@@ -1,268 +1,439 @@
+<!--实验人员任务单表格-->
+
 {% extends 'zhongye/base.html' %}
-{% load static from staticfiles %}
+{% load static %}
 {% block base %}
-  <div style="width: 80%;margin: 0 auto">
-  <div style="height: 200px;margin: 0 auto">
-    <h3 style="text-align: center;line-height: 200px"><span>实验人员实验记录表</span></h3>
-  </div>
-<!--实验人员实验记录表格-->
-<table
-  id="table"
-{#  data-toolbar="#toolbar"#}
-{#  data-search="true"#}
-  data-show-refresh="true"
-  data-show-print="true"
-  data-show-fullscreen="true"
-{#  data-show-columns="true"#}
-{#  data-show-columns-toggle-all="true"#}
-{#  data-detail-view="true"#}
-  data-show-export="true"
-  data-click-to-select="true"
-{#  data-detail-formatter="detailFormatter"#}
-{#  data-minimum-count-columns="2"#}
-  data-show-pagination-switch="true"
-  data-pagination="true"
-  data-total-field = "biaotou"
-  data-data-field = "data"
-{#  data-id-field="id"#}
-  data-page-list="[10, 25, 50, 100, all]">
-{#  data-show-footer="true"#}
-{#  data-side-pagination="server"#}
-{#  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"#}
-{#  data-response-handler="responseHandler">#}
+<div style="width: 80%;margin: 0 auto">
 
-
+<form name="form" method="GET" action="">
+<table style="width: 100%;margin-top: 50px; margin-bottom: 50px" id="table0">
+    <tr style="height: 30px">
+        <td width="10%"><span style="font-weight: bolder">设备名称：</span></td>
+        <td width="15%"><span id="machine_name"></span><input type = "hidden" name="machine_name" class="machine_name" id="machine_name0" value =""></td>
+        <td width="10%"><span style="font-weight: bolder">设备编号：</span></td>
+        <td width="15%"><span id="machine_id"></span><input type = "hidden" name="machine_id" class="machine_id" id="machine_id0" value =""></td>
+        <td width="10%"><span style="font-weight: bolder">试验日期：</span></td>
+        <td width="15%"><span id="date"></span><input type = "hidden" name="date" class="date" id="date0"  value =""></td>
+        <td width="10%"><span style="font-weight: bolder">室&emsp;温：</span></td>
+        <td width="15%"><input type="text" class="form-control temperature" id="temperature"></td>
+    </tr>
+    <tr>
+        <td width="10%"><span style="font-weight: bolder">试验开始：</span></td>
+        <td width="15%"><span id="start"></span><input type = "hidden" name="start" class="start" id="start_time" value =""></td>
+        <td colspan="4" width="50%"><span></span></td>
+        <td width="10%"><span style="font-weight: bolder">试验结束：</span></td>
+        <td width="15%"><span id="end"></span><input type = "hidden" name="end" class="end" id="end_time" value =""></td>
+    </tr>
 </table>
 
+
+<div id="toolbar">
+    <button type="button" id="start_test" class="btn btn-danger" onclick="startTime()" > 开始实验</button>
+    <button type="button" id="end_test" class="btn btn-danger" onclick="endTime()" > 刷新</button>
+    <button type="button" id="save" class="btn btn-danger" onclick="myCheck()">保存</button>
+</div>
+
+<table
+  id="table"
+  data-toolbar="#toolbar"
+
+  data-show-pagination-switch="true"
+  data-pagination="true"
+  data-id-field="id"
+{#  data-show-print="true"#}
+  data-page-list="[10, 25, 50, 100, all]"
+{#  data-show-footer="true"#}
+  data-side-pagination="server"
+{#  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"#}
+{#  data-response-handler="responseHandler">#}
+    >
+</table>
+</form>
+
 <script>
-  var $table = $('#table')
-  var $remove = $('#remove')
-  var selections = []
+    var $table = $('#table');
+    var isStart = 0;
 
+    function operateFormatter(value, row, index) {
+    return [
+        '<form name="form" method="post" action="/assignWrong/">',
+        '<input type = "hidden" name="sample_id" value = "',
+        row.sample_id,
+        '" >',
+        '<input type = "hidden" name="userID" value = "',
+        {{userID}},
+        '" >',
+        '<button type="submit" id="wrong" class="btn btn-danger" > 确定</button>',
+        '</form>',
+    ].join('')
+  }
 
+  function getIdSelections() {
+    return $.map($table.bootstrapTable('getSelections'), function (row) {
+      return row.sample_id
+    })
+  }
 
-  {#function responseHandler(res) {#}
-  {#  $.each(res.rows, function (i, row) {#}
-  {#    row.state = $.inArray(row.id, selections) !== -1#}
-  {#  })#}
-  {#  return res#}
-  function initTable() {
-    $table.bootstrapTable('destroy').bootstrapTable({
-      height: 700,
-      url:"/LoadData/",
-      locale: "zh-CN",
-      onloadend:initForm(),
-      columns: [
-        [{
-          colspan: 6,
-          {#field: "weiTuo",#}
-          title:"<span id='weituodanbianhao'>委托单编号:</span>",
-          align: 'left',
-          valign: 'middle',
-          {#formatter:  operateFormatter,#}
-        },
-        {
-          title: "<span id = 'shiyanrenyuan'>试验人员:</span>",
-          colspan: 4,
-          align: 'left',
-          valign: 'middle',
-        },
-          {
-          title: "<span id = 'shiyankaishi'>实验开始:</span>",
-          colspan: 3,
-          align: 'left',
-          valign: 'middle',
-        },
-        {
-          title: "<span id = 'shiyanjieshu'>实验结束:</span>",
-          colspan: 3,
-          align: 'left',
-          valign: 'middle',
-        }],
-        [{
-          title: "<span id = 'shiyangkaishi'>试样开始:</span>",
-          colspan: 6,
-          align: 'left',
-          valign: 'middle',
-        },
-        {
-          title: "<span id = 'shebeimingcheng'>设备名称:</span>",
-          colspan: 4,
-          align: 'left',
-          valign: 'middle',
-        },
-         {
-          title: "<span id = 'liangjumingcheng'>量具名称:</span>",
-          colspan: 6,
-          align: 'left',
-          valign: 'middle',
-        }],
-        [{
-          title: "<span id = 'jianyanyiju'>检验依据:</span>",
-          colspan: 6,
-          align: 'left',
-          valign: 'middle',
-        },
-        {
-          title: "<span id = 'shebeibianhao'>设备编号:</span>",
-          colspan: 4,
-          align: 'left',
-          valign: 'middle',
-        },{
-          title: "<span id = 'liangjubianhao'>量具编号:</span>",
-          colspan: 6,
-          align: 'left',
-          valign: 'middle',
-        }],
-        [
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+          {#height: 750,#}
+          locale: 'zh-CN',
+          url: "/LoadExpData/?userID=" + {{ userID }},
+          columns: [
             {
-            field: 'id',
-            title: '试样</br>编号',
-            align:'center',
-            valign:'center',
-
-        },
-        {
-            field: 'name',
-            title: '钢号</br>级别',
-            align:'center',
-            valign:'center',
-
-        },
-        {
-            field: 'danwei',
-            title: '规格</br>mm',
-            align:'center',
-            valign:'center',
-
-        },
-        {
-            field: 'zhengzhimianmao',
-            title: '面积</br>mm²',
-            align:'center',
-            valign:'center',
-
-        },
-        {
-            field: 'zhiwu',
-            title: '屈服负荷</br>kNFp0.2',
-            align: 'center',
-            valign:'center',
-
-        },
-        {
-            field: 'zhicheng',
-            title: '屈服强度</br>MPaRp0.2',
-            maxHeight:'5em',
-            align: 'center',
-            valign:'center',
-
-        },
-        {
-            field: 'shenfenzhenghao',
-            title: '最大负荷</br>kNFm',
-            align: 'center',
-            valign:'center',
-
-        },
-        {
-            field: 'lianxidianhua',
-            title: '抗拉强度</br>MPaRm',
-            align: 'center',
-            valign:'center',
-
-
-        },
-        {
-            field: 'kechengmingcheng',
-            title: '原始标距</br>mm',
-            align: 'center',
-            valign:'center',
-
-        },
-        {
-            field: 'kaihuhang',
-            title: '断后标距</br>mm',
-            align: 'center',
-            valign:'center',
-
-        },
-        {
-            field: 'kahao',
-            title: '伸长率</br>%',
-            align: 'center',
-            valign:'center',
-
-        },
-        {
-            field: 'shehuijianzhi',
-            title: '最大力</br>原始标距</br>mm',
-            align: 'center',
-            valign:'center',
-
-        },
-        {
-            field: 'labels',
-            title: '最大力</br>断后标距</br>mm',
-            align: 'center',
-            valign:'center',
-
-        },
-
-        {
-            field: 'hezuoqingkuang',
-            title: '最大力</br>总延伸率</br>%',
-            align: 'center',
-            valign:'center',
-
-        },
-        {
-            field: 'zhengzhibiaoxian',
-            title: '强屈比',
-            align: 'center',
-            valign:'center',
-
-
-        },
-        {
-            field: 'shoukejilu',
-            title: '屈屈比',
-            align: 'center',
-            valign:'center',
-        },
-        ]
-      ]
-    })
-
+              checkbox: true,
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '试样编号',
+              field: 'sample_actual_id',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '钢号级别',
+              field: 'brand_grade',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '规格',
+              field: 'd',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '屈服负荷<br>kN<br>FP0.2',
+              field: 'yeild_load',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '屈服强度<br>MPa<br>Rp0.2',
+              field: 'rel',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '最大负荷<br>kN Fm',
+              field: 'peak_load',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '抗拉强度<br>MPa Rm',
+              field: 'rm',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '原始标距<br>mm',
+              field: 'origin_gauge',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '断后标距<br>mm',
+              field: 'post_break_gauge',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },  {
+              title: '伸长率<br>%',
+              field: 'a',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '最大力<br>原始标距<br>mm',
+              field: 'max_n_origin',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '最大力<br>断后标距<br>mm',
+              field: 'max_n_after_bre',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '最大力<br>总延伸率<br>%',
+              field: 'agt',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            },{
+              title: '强屈比',
+              field: 'rm0_rel0',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: '屈屈比',
+              field: 'rel0_rel',
+              colspan: 1,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              field: 'operate',
+              title: '分配有误',
+              align: 'center',
+              valign: 'middle',
+              clickToSelect: false,
+              formatter: operateFormatter
+            }
+          ]
+        })
 
   }
-  function initForm(){
-    {#console.log($("#weituodan").innerText)#}
-    $.ajax({
-      type:"POST",
-      url:"/loadOriginalRecord/",
-      success:function(result) {
-        {#console.log(jQuery.parseJSON(result))#}
-        result = jQuery.parseJSON(result)
-        for(var key in result["data"]){
-          {#console.log(key,result["data"][key])#}
-          $("#"+key).append(result["data"][key])
+
+  function selectTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+          {#height: 750,#}
+          locale: 'zh-CN',
+          url: "/selectExpData/?userID=" + {{ userID }},
+          columns: [
+            {
+              title: '试样编号',
+              field: 'sample_actual_id',
+              colspan: 1,
+              align: 'center'
+            },{
+              title: '钢号级别',
+              field: 'brand_grade',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '规格',
+              field: 'd',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '屈服负荷<br>kN FP0.2',
+              field: 'yeild_load',
+              colspan: 1,
+              align: 'center'
+            },{
+              title: '屈服强度<br>MPa Rp0.2',
+              field: 'rel',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '最大负荷<br>kN Fm',
+              field: 'peak_load',
+              colspan: 1,
+              align: 'center'
+            },{
+              title: '抗拉强度<br>MPa Rm',
+              field: 'rm',
+              colspan: 1,
+              align: 'center'
+            },{
+              title: '原始标距<br>mm',
+              field: 'origin_gauge',
+              colspan: 1,
+              align: 'center'
+            },{
+              title: '断后标距<br>mm',
+              field: 'post_break_gauge',
+              colspan: 1,
+              align: 'center'
+            },  {
+              title: '伸长率<br>%',
+              field: 'a',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '最大力<br>原始标距<br>mm',
+              field: 'max_n_origin',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '最大力<br>断后标距<br>mm',
+              field: 'max_n_after_bre',
+              colspan: 1,
+              align: 'center'
+            },{
+              title: '最大力<br>总延伸率<br>%',
+              field: 'agt',
+              colspan: 1,
+              align: 'center'
+            },{
+              title: '强屈比',
+              field: 'rm0_rel0',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '屈屈比',
+              field: 'rel0_rel',
+              colspan: 1,
+              align: 'center'
+            }, {
+              field: 'operate',
+              title: '分配有误',
+              align: 'center',
+              clickToSelect: false,
+              formatter: operateFormatter
+            }
+          ]
+        })
+
+  }
+
+
+  function GetDate(format) {
+         /**
+         * format=1表示获取年月日
+         * format=0表示获取年月日时分秒
+         * **/
+         var now = new Date();
+         var year = now.getFullYear();
+         var month = now.getMonth()+1;
+         var date = now.getDate();
+         var day = now.getDay();//得到周几
+         var hour = now.getHours();//得到小时
+         var minu = now.getMinutes();//得到分钟
+         var sec = now.getSeconds();//得到秒
+
+         if (format==1){
+             date_time = year+"-"+month+"-"+date;
         }
-      },
-      error:function(result){
+        else if (format==2){
+            date_time = year+"-"+month+"-"+date+" "+hour+":"+minu+":"+sec;
+        }
+        return date_time
+    }
 
-      }
-    })
-  }
+    function dateTime() {
+        date_time = GetDate(1);
+        $("#date").append(date_time);
+        $(".date").attr('value', date_time);
+    }
+
+
+
+
+    function startTime(){
+        start_time = GetDate(2);
+        sample_ids = getIdSelections();
+        if(Object.keys(sample_ids).length === 0){
+            alert("请选择要试验的试样！");
+            return false;
+        }
+
+
+        if(isStart == 0){
+            $("#start").append(start_time);
+            $(".start").attr('value', start_time);
+            $(".userID").attr('value', {{ userID }});
+            isStart = 1;
+        }
+
+
+
+        for(var i=0; i<sample_ids.length; i++){
+            $.ajax({
+                type: "post",
+                url: "/selectSample/",
+                data: {"sample_id": sample_ids[i]},
+                success: function () {
+                    console.log("yes!!!!!!!");
+                },
+                error: function () {
+                    console.log("no!!!!!!!!!!!!!");
+                }
+
+            })
+        }
+
+
+        $.ajax({
+            type: "get",
+            url: "/getMachine/",
+            data: {},
+            success: function(data){
+                    data = jQuery.parseJSON(data);
+                    console.log(data);
+                    jQuery.getScript(
+                        "http://pv.sohu.com/cityjson?ie=utf-8",function(){
+                        //localIP = returnCitySN["cip"];
+                        console.log(returnCitySN);
+                        for (var i = 0; i < data.length; i++){
+                            console.log(data[i]);
+                            if(data[i]['ip'] == returnCitySN['cip']){
+                                $("#machine_id").append(data[i]['machine_id']);
+                                $(".machine_id").attr('value', data[i]['machine_id']);
+                                $("#machine_name").append(data[i]['machine_name']);
+                                $(".machine_name").attr('value', data[i]['machine_name']);
+                            }
+                        }
+
+                    });
+
+            }
+        });
+
+    }
+
+    function endTime(){
+        end_time = GetDate(2);
+        $("#end").empty();
+        $("#end").append(end_time);
+        $(".end").attr('value', end_time);
+        selectTable();
+    }
+
+
+
+    function myCheck() {
+        var temperature = document.getElementById("temperature").value.trim();
+        var start = document.getElementById("start_time").value.trim();
+        var end = document.getElementById("end_time").value.trim();
+
+        var date = document.getElementById("date0").value.trim();
+        var machine_id = document.getElementById("machine_id0").value.trim();
+        var machine_name = document.getElementById("machine_name0").value.trim();
+        if(temperature == null || temperature == ""){
+            alert("请填写室温！");
+            return false;
+        }
+        if(start == null || start == ""){
+            alert("请开始试验！");
+            return false;
+        }
+        if(end == null || end == ""){
+            alert("请刷新！");
+            return false;
+        }
+
+
+        $.ajax({
+              type: "get",
+              url: "/saveExpData/",
+              data:{"userID": {{userID}}, "temperature": temperature, "date": date, "start": start, "end": end, "machine_name": machine_name, "machine_id": machine_id},
+              success: function (data, status) {
+                if (status == "success") {
+                    alert('保存成功！');
+                    window.location.href = "/experiment_print/?userID=" + {{ userID }};
+                }
+              },
+              error: function () {
+                alert('编辑失败');
+              },
+              complete: function () {
+
+              }
+
+        })
+    }
 
   $(function() {
-    initTable()
-    {#initForm()#}
-
+    dateTime();
+    initTable();
   })
 </script>
-    </div>
+</div>
+
 
 {% endblock base %}
-
-

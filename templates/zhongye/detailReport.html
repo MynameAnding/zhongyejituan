@@ -1,0 +1,196 @@
+{% extends 'zhongye/base.html' %}
+{% load static %}
+{% block base %}
+
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+
+  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>
+  <script src="{% static 'base/js/common.js' %}"></script>
+
+
+  <script src="{% static 'base/js/tableExport.min.js' %}"></script>
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  {#  <script src="{% static 'base/js/layer.js' %}"></script>#}
+  <script
+    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
+
+
+</head>
+
+<body style="width: 95%;margin: 0 auto;">
+
+
+<div style="margin-top: 50px;">
+    <div>
+        <div id="boxes">
+            <div id="outer"><div id="icon"  onclick="report_head()"><img height="50px" style="margin-top: 15px" src="{% static 'flexbox/HL.png' %}"></div>首页报告</div>
+            <div id="outer"><div id="icon"  onclick="report_tension()"><img height="60px" style="margin-top: 8px" src="{% static 'flexbox/lali.png' %}"></div>拉弯报告</div>
+            <div id="outer"><div id="icon"><img height="35px" style="margin-top: 20px" src="{% static 'flexbox/huaxue.png' %}"></div>化学报告</div>
+            <div id="outer"><div id="icon"><img height="45px" style="margin-top: 15px" src="{% static 'flexbox/jinxiang.png' %}"></div>金相报告</div>
+            <div id="outer"><div id="icon"><img height="45px" style="margin-top: 15px" src="{% static 'flexbox/head_report.png' %}"></div>尺寸及表面</div>
+            <div id="outer"><div id="icon"><img height="30px" style="margin-top: 22px" src="{% static 'flexbox/qita.png' %}"></div>...</div>
+        </div>
+        <script type="text/javascript">
+                function report_head() {
+                    window.location.href = "/report_head/?report_id=" + report_id + "&product_number=" + product_number;
+                }
+                function report_tension() {
+                    window.location.href = "report_tension/?report_id=" + report_id + "&product_number=" + product_number;
+                }
+        </script>
+    </div>
+
+{#<div id="toolbar">#}
+{#    <input type="button" onclick="printreport()" class="btn btn-primary" value="打印报告">#}
+{#    <form name="form" method="get" action="/report_head/" >#}
+{#        <input type="hidden" name="report_id" value= "report_id" id="report_id">#}
+{#        <input type="hidden" name="product_number" value="product_number" id="product_number">#}
+{#        <input type="submit" value="头部报告" class="btn btn-primary">#}
+{#    </form>#}
+{#  </div>#}
+{#    <div id="toolbar">#}
+{#    <input type="button" onclick="printreport()" class="btn btn-primary" value="打印报告">#}
+{#    <form name="form" method="get" action="/report_tension/" >#}
+{#        <input type="hidden" name="report_id" value= "report_id" id="report_id" >#}
+{#        <input type="hidden" name="product_number" value="product_number" id="product_number">#}
+{#        <input type="submit" value="拉伸报告" class="btn btn-primary" >#}
+{#        <div id="outer"><div id="icon" ><img height="60px" style="margin-top: 10px" src="{% static 'flexbox/lali.png' %}"></div>拉力</div>#}
+{#    </form>#}
+{#  </div>#}
+    <table
+    {#  style="margin-top: 50px;"#}
+    id="table"
+    data-toolbar="#toolbar"
+{#    data-search="true"#}
+    data-show-refresh="true"
+    {#    data-show-toggle="true"#}
+    data-show-fullscreen="true"
+    data-show-columns="true"
+    data-show-columns-toggle-all="true"
+{#    data-detail-view="true"#}
+    data-show-export="true"
+    data-click-to-select="true"
+    data-detail-formatter="detailFormatter"
+    data-minimum-count-columns="2"
+    data-show-pagination-switch="true"
+    data-pagination="true"
+    {#    data-id-field="id"#}
+    data-page-list="[5,10, 25, 50, 100, all]"
+    {#    data-show-footer="true"#}
+    data-side-pagination="server"
+    {#    data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"#}
+    {#    data-response-handler="responseHandler">#}
+  >
+  </table>
+</div>
+<script>
+        var $table = $('#table')
+        var selections = []
+        var report_id = getQueryString("id")
+        $("#report_id").val(report_id)
+        var product_number = getQueryString("product_number")
+        $("#product_number").val(product_number)
+        console.log(report_id)
+        console.log(product_number)
+
+        function getIdSelection() {
+            return $.map($table.bootstrapTable('getSelections'), function (row) {
+                return row.id
+            })
+        }
+
+        function responseHandler(res) {
+            $.each(res.rows, function(i, row) {
+                row.state = $.inArray(row.id, selections) !== -1
+            })
+            return res
+        }
+
+        function initTable() {
+            $table.bootstrapTable('destroy').bootstrapTable({
+                locale: 'zh-CN',
+                url: "/detailReportData/?report_id=" + report_id + "&product_number=" + product_number,
+                method: "GET",
+                {#data: {"report_id": report_id, "product_number": product_number},#}
+                columns: [
+                    [{
+                        title: '试样编号',
+                        field: 'sample_actual_id',
+                        align: 'center',
+                        valign: 'middle',
+                    }, {
+                        title: '拉伸',
+                        field: 'lashen',
+                        align: 'center',
+                        valign: 'middle',
+                    }, {
+                        title: '弯曲',
+                        field: 'wanqu',
+                        align: 'center',
+                        valign: 'middle',
+                    }, {
+                        title: '反弯',
+                        field: 'fanwan',
+                        align: 'center',
+                        valign: 'middle',
+                    }, {
+                        title: '化学',
+                        field: 'huaxue',
+                        align: 'center',
+                        valign: 'middle',
+                    }, {
+                        title: '金相',
+                        field: 'jinxiang',
+                        align: 'center',
+                        valign: 'middle',
+                    }]
+                ]
+            })
+
+            $table.on('check.bs.table uncheck.bs.table' +
+          'check-all.bs.table uncheck-all.bs.table',
+      function () {
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+          selections = getIdSelections()
+      })
+
+
+      $table.on('all.bs.table', function (e, name, args) {
+          console.log(name, args)
+      })
+        }
+        $(function () {
+      initTable()
+  })
+</script>
+
+
+
+</body>
+</html>
+
+{% endblock base %}
+

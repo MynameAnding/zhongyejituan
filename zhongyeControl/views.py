@@ -15,14 +15,7 @@ def index(request):
     return render(request, 'zhongye/Login.html')
 
 
-@CheckSession
-def approval_index(request):
-    return render(request, 'zhongye/approval_index.html')
 
-
-@CheckSession
-def approval_report(request):
-    return render(request, 'zhongye/approval_report.html')
 
 
 @csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
@@ -60,18 +53,8 @@ def login(request):  # 验证登录信息
                 LoginSession = {'LoginName': username, 'LoginId': user.id, 'LoginCx': user.cx}
                 request.session['LoginSession'] = LoginSession
                 request.session.set_expiry(0)
-                # return render(request, 'zhongye/professorTable.html')
-                if user.cx == 0:
-                    return HttpResponseRedirect("/sample_index/")
-                    # return render(request, 'zhongye/sample_index.html')
-                elif user.cx == 1:
-                    return HttpResponseRedirect("/assignment_index/")
-                elif user.cx == 2:
-                    return HttpResponseRedirect("/test_index/")
-                elif user.cx == -1:
-                    return HttpResponseRedirect("/admin/")
-                else:
-                    return HttpResponseRedirect("/approval_index/")
+                return HttpResponseRedirect("/admin/")
+
             else:
                 return HttpResponse('<script>alert("登录信息(密码)填写有误，请重新填写！");location.href="/";</script>')
         return HttpResponse('<script>alert("登录信息(用户名)填写有误，请重新填写！");location.href="/";</script>')
@@ -87,25 +70,4 @@ def first(request):
         return render(request, 'zhongye/login.html')
 
 
-@csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
-def LoadData(request):
-    AllProf = Professors.objects.all()
-    data = json.loads(serializers.serialize('json', AllProf))
-    result = []
-    for item in data:
-        prof = item['fields']
-        prof['id'] = item['pk']
-        result.append(prof)
-    re = {"data": result, "biaotou": len(result)}
-    return HttpResponse(json.dumps(re))
 
-
-
-def upImages(request, paraID):
-    if request.method == "GET":
-        # proName = request.GET['name']
-        proId = paraID
-        # print(proId)
-        return render(request, 'zhongye/upImages.html', {'proId': proId})
-    else:
-        return HttpResponse(request, "<script>alert('图片上传出现问题！')</script>")

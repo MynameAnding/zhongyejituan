@@ -18,6 +18,6 @@ urlpatterns = [
 
     url(r'test_index/$', views.test_index, name="test_index"),
     url(r'zhongye/test/$', views.test, name="test"),
-    url(r'^LoadData/$', views.LoadData, name='LoadData'),
+    # url(r'^LoadData/$', views.LoadData, name='LoadData'),
     # url(r'^loadOriginalRecord/$', views.loadOriginalRecord, name='loadOriginalRecord'),
 ]

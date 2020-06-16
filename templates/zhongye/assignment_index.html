@@ -1,14 +1,26 @@
 {% extends 'zhongye/base.html' %}
-{% load static from staticfiles %}
+{% load static %}
 {% block base %}
+
 
 <!--分配人员首页表-->
 
 <div style="width: 80%;margin: 0 auto">
-  <div style="height: 200px;margin: 0 auto">
-    <h3 style="text-align: center;line-height: 200px"><span>分配人员首页表</span></h3>
-  </div>
-
+<div>
+    <div id="boxes">
+            <div id="outer"><div id="icon_select"  onclick="assignIndex()"><img height="60px" style="margin-top: 10px" src="{% static 'flexbox/lali.png' %}"></div>拉力</div>
+            <div id="outer"><div id="icon"><img height="55px" style="margin-top: 12px" src="{% static 'flexbox/wanqu.png' %}"></div>弯曲</div>
+            <div id="outer"><div id="icon"><img height="55px" style="margin-top: 12px" src="{% static 'flexbox/fanwan.png' %}"></div>反弯</div>
+            <div id="outer"><div id="icon"><img height="35px" style="margin-top: 22px" src="{% static 'flexbox/huaxue.png' %}"></div>化学</div>
+            <div id="outer"><div id="icon"><img height="45px" style="margin-top: 15px" src="{% static 'flexbox/jinxiang.png' %}"></div>金相</div>
+            <div id="outer"><div id="icon"><img height="30px" style="margin-top: 22px" src="{% static 'flexbox/qita.png' %}"></div>...</div>
+    </div>
+<script type="text/javascript">
+        function assignIndex() {
+            window.location.href = "/assignment_index/";
+        }
+</script>
+</div>
 
 
 {#<div id="toolbar">#}
@@ -37,12 +49,12 @@
   data-page-list="[10, 25, 50, 100, all]"
 {#  data-show-footer="true"#}
   data-side-pagination="server"
-  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
+{#  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"#}
 {#  data-response-handler="responseHandler"#}
 >
 </table>
 
-<script>
+<script defer="true">
   var $table = $('#table')
 
   {#function responseHandler(res) {#}
@@ -56,94 +68,102 @@
     $table.bootstrapTable('destroy').bootstrapTable({
       {#height: 550,#}
       locale: 'zh-CN',
+      url: "/LoadAssignData/",
       columns: [
 
         {
-          title: '报告编号',
-          field: 'id',
+          title: '试样编号',
+          field: 'sample_actual_id',
           align: 'center',
-          valign: 'middle',
           sortable: true,
-          editable: {
-                type: "text",
-                title: "报告编号",
-                validate: function (value) {
-                  if (!value) {
-                    return '报告编号不能为空';
-
-                  }
-                }
-
-              }
         },  {
-          title: '样品名称',
-          field: 'sampleName',
+          title: '规格型号',
+          field: 'd',
           align: 'center',
-          valign: 'middle',
           sortable: false,
         },  {
+          title: '牌号级别',
+          field: 'brand_grade',
+          align: 'center',
+          sortable: true,
+        },  {
+          title: '样品名称',
+          field: 'sample_name',
+          align: 'center',
+          sortable: false,
+        }, {
           title: '检验依据',
-          field: 'basis',
+          field: 'test_basis',
           align: 'center',
-          valign: 'middle',
-          sortable: true,
-        },  {
-          title: '委托日期',
-          field: 'date',
-          align: 'center',
-          valign: 'middle',
-          sortable: true,
-        },  {
+          sortable: false,
+        }, {
           title: '周期',
-          field: 'isUrgent',
+          field: 'period',
           align: 'center',
-          valign: 'middle',
-          sortable: true,
-        },  {
-          field: 'operate',
-          title: '操作',
-          align: 'center',
-          events: window.operateEvents,
-          formatter: operateFormatter
-        }
-      ]
+          sortable: false,
+        }, {
+                title: '分配',
+                field: 'get_people',
+                editable: {
+                    type: 'select',
+                    placeholder:'请分配',
+                    source: function () {
+                        var result = [];
+                        $.ajax({
+                            url: '/getPeopleNames/',
+                            async: false,
+                            type: "get",
+                            data: {},
+                            success: function (data, status) {
+                                {# console.log(jQuery.parseJSON(data)); #}
+                                data = jQuery.parseJSON(data);
+                                $.each(data, function (key, value) {
+                                        result.push({ value: value.id, text: value.username });
+
+
+                                });
+                            }
+                        });
+                        return result;
+                    }
+                    }
+
+            }
+      ],
+        onEditableSave: function (field, row, oldValue, $el) {
+            $.ajax({
+              type: "post",
+              url: "/updateGetPeople/",
+              data: {"sample_id":row.sample_id,"get_people":row.get_people},
+              success: function (data, status) {
+                if (status == "success") {
+                  initTable();
+                }
+              },
+              error: function () {
+                alert('编辑失败');
+              },
+              complete: function () {
+
+              }
+
+            });
+          }
     })
 
 
   }
-  function operateFormatter(value, row, index) {
-    return [
-      '<form name="form" method="post" action="/assignment/">',
-      '<input type = "hidden" value = "',
-      row.id,
-      '" >',
-      '<input type="submit" name="Submit" value="分配">',
-      '</form>',
-    ].join('')
-  }
 
-  window.operateEvents = {
-    'click .begin': function (e, value, row, index) {
-      $.ajax({
-        method: "POST",
-        data: {"sample_id": row.sample_id},
-        url: "/toConsignment/",
-        success: function (result) {
-          {#console.log(jQuery.parseJSON(result))#}
 
-        },
-        error: function (result) {
 
-        }
-      })
-    }
-  }
   $(function() {
     initTable()
 
   })
 </script>
-</div>
 
+
+
+</div>
 
 {% endblock base %}

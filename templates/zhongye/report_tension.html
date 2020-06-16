@@ -1,0 +1,380 @@
+{% load static %}
+{% block base %}
+
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+
+{#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/common.js' %}"></script>
+
+
+  <script src="{% static 'base/js/tableExport.min.js' %}"></script>
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  {#  <script src="{% static 'base/js/layer.js' %}"></script>#}
+  <script
+    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
+
+
+</head>
+
+<body style="width: 70%;margin: 0 auto;">
+<center>
+<img src="{% static 'flexbox/report_head.png' %}">
+</center>
+
+<div style="margin-top: 50px;">
+
+  <table
+    style="font-family: 'Songti TC'"
+    id="table"
+  >
+  </table>
+</div>
+
+<script>
+    var $table = $('#table')
+    var selection = []
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            {#url: "/reportHeadData/",#}
+            local: 'zh-CN',
+            method: "GET",
+            columns: [
+                [{
+                    title: '报 告 编 号',
+                    field: 'report_id',
+                    colspan: 2,
+                    align: 'center'
+                }, {
+                    title: "<span id='report_id'>{{ data.report_id }}</span>",
+                    field: 'reportid',
+                    colspan: 4,
+                    align: 'center'
+                }], [{
+                    title: '产 品 牌 号',
+                    field: 'brand_grade',
+                    colspan: 2,
+                    align: 'center'
+                }, {
+                    title: "<span id='brand_grade'>{{ data.brand_grade }}</span>",
+                    field: 'brandgrade',
+                    colspan: 4,
+                    align: 'center'
+                }], [{
+                    title: '试 样 规 格',
+                    field: 'd',
+                    colspan: 2,
+                    align: 'center'
+                }, {
+                    title: "<span id='d'>{{ data.d }}</span>",
+                    field: 'dd',
+                    colspan: 4,
+                    align: 'center'
+                }], [{
+                    title: '产 品 批 号',
+                    field: 'product_number',
+                    colspan: 2,
+                    align: 'center'
+                }, {
+                    title: "<span id='product_number'>{{ data.product_number }}</span>",
+                    field: 'productnumber',
+                    colspan: 4,
+                    align: 'center'
+                }], [{
+                title: '试 样 编 号',
+                field: 'sampleIds',
+                colspan: 3,
+                align: 'center'
+            }, {
+              title: "<span id='sample_id_1'>{{ data.sample_actual_id_1 }}</span>",
+              field: 'sampleId1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='sample_id_2'>{{ data.sample_actual_id_2 }}</span>",
+              field: 'sampleId2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='sample_id_3'>{{ data.sample_actual_id_3 }}</span>",
+              field: 'sampleId3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+              title: '检验项目',
+              field: 'testItems',
+              colspan: 2,
+              align: 'center'
+            }, {
+              title: '标准值',
+              field: 'standardValues',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '实测值',
+              field: 'actualValue',
+              colspan: 3,
+              align: 'center'
+            }], [{
+              title: '力学工艺性能',
+              field: 'mechanics',
+              rowspan: 8,
+              valign: 'middle',
+              align: 'center'
+            }, {
+              title: '屈服强度MPa Rp0.2',
+              field: 'yieldStrength',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='ReL'>{{ data.rel }}</span>",
+              field: 'yieldStrengthStandard',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='rel_1'>{{ data.rel_1 }}</span>",
+              field: 'actualValueYieldStrength1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='rel_2'>{{ data.rel_2 }}</span>",
+              field: 'actualValueYieldStrength2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueYieldStrength3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+              title: '抗拉强度MPa Rm',
+              field: 'tensileStrength',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='Rm'>{{ data.rm }}</span>",
+              field: 'tensileStrengthStandard',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='rm_1'>{{ data.rm_1 }}</span>",
+              field: 'actualValueTensileStrength1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='rm_2'>{{ data.rm_2 }}</span>",
+              field: 'actualValueTensileStrength2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueTensileStrength3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+              title: '最大力总伸长率Agt %',
+              field: 'totalElongation',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='A'>{{ data.agt }}</span>",
+              field: 'totalElongationStandard',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='agt_1'>{{ data.agt_1 }}</span>",
+              field: 'actualValueTotalElongation1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='agt_2'>{{ data.agt_2 }}</span>",
+              field: 'actualValueTotalElongation2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueTotalElongation3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+              title: 'R0m/R0eL',
+              field: 'r0mr0el',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='R0mReL0'>{{ data.rm0rel0 }}</span>",
+              field: 'r0mr0elStandard',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='rm0rel0_1'>{{ data.rm0rel0_1 }}</span>",
+              field: 'actualValuer0mr0el1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='rm0rel0_2'>{{ data.rm0rel0_2 }}</span>",
+              field: 'actualValuer0mr0el2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValuer0mr0el3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+              title: 'R0eL/ReL',
+              field: 'r0elrel',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='ReL0ReL'>{{ data.rel0rel }}</span>",
+              field: 'r0elrelStandard',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='rel0rel_1'>{{ data.rel0rel_1 }}</span>",
+              field: 'actualValuer0elrel1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='rel0rel_2'>{{ data.rel0rel_2 }}</span>",
+              field: 'actualValuer0elrel2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValuer0elrel3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+              title: '断后伸长率A',
+              field: 'r0elrel',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='ReL0ReL'>{{ data.a }}</span>",
+              field: 'aStandard',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='a_1'>{{ data.a_1 }}</span>",
+              field: 'actualValuea1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='a_2'>{{ data.a_2 }}</span>",
+              field: 'actualValuea2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValuea3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+              title: '弯曲4d 180°',
+              field: 'bending',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='wanquyatou'>{{ data.wanquyatou }}</span>",
+              field: 'bendingStandard',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueBending1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueBending2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueBending3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+              title: '反向弯曲°',
+              field: 'reversedBending',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='fanxiangwanqu'>{{ data.fanxiangwanqu }}</span>",
+              field: 'reversedBendingStandard',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueReversedBending1',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueReversedBending2',
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: '/',
+              field: 'actualValueReversedBending3',
+              colspan: 1,
+              align: 'center'
+            }], [{
+                title: '备注',
+                    field: 'remark',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                title: '/',
+                    field: 'rremark',
+                    colspan: 5,
+                    align: 'center'
+                }]
+            ]
+
+        })
+        $table.on('check.bs.table uncheck.bs.table' +
+          'check-all.bs.table uncheck-all.bs.table',
+      function () {
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+          selections = getIdSelections()
+      })
+
+
+      $table.on('all.bs.table', function (e, name, args) {
+          console.log(name, args)
+      })
+    }
+    $(function () {
+        initTable()
+      })
+</script>
+</div>
+
+</body>
+{% endblock base %}

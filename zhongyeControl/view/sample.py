@@ -1,12 +1,14 @@
-from django.db.models import Q
+from django.db.models import Q, Min
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.http import HttpResponseRedirect
-from ..decoBean import CheckSession,CheckAuthShouyang
+from ..decoBean import CheckSession, CheckAuthShouyang
 from django.core import serializers
 from ..models import *
 from django.views.decorators.csrf import csrf_exempt
 import json
+from ..aggregate import *
+from copy import deepcopy
 
 
 @csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
@@ -42,11 +44,6 @@ def report(request):
         return render(request, 'zhongye/report.html')
 
 
-
-
-
-
-
 @csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
 @CheckSession
 @CheckAuthShouyang
@@ -58,38 +55,25 @@ def sample(request):
 @CheckSession
 @CheckAuthShouyang
 def loadSampleData(request):
-    sheet_id = request.GET.get("sheet_id")
-    # print(sheet_id)
-    offset = int(request.GET.get("offset", default=0))
-    limit = int(request.GET.get("limit", default=2000))
-    # print(offset,limit)
-    datas = Sample.objects.filter(sheet_id=sheet_id).order_by("sample_id").all()[offset:offset + limit]
-    # commission = CommissionSheet.objects.filter(id=reportID).values("laiyang_id","number").first()
-    total = Sample.objects.filter(sheet_id=sheet_id).count()
+    para = request.GET.copy().dict()
+    sheet_id = para["sheet_id"]
+    if 'laiyang_id' in para.keys():
+        laiyang_id = para["laiyang_id"]
+        sql = "select sample_id,sample_actual_id,sheet_id,sample_number,d,brand_grade,product_number from sample where sheet_id ="+sheet_id+" and  laiyang_id = "+laiyang_id+" order by sample_id"
+    else:
+        sql = "select sample_id,sample_actual_id,sheet_id,sample_number,d,brand_grade,product_number from sample where sheet_id ="+sheet_id+" group by laiyang_id order by sample_id"
+    datas = Sample.objects.raw(sql)
     datas = json.loads(serializers.serialize("json", datas))
-    # print(datas)
+
     rows = []
     for data in datas:
         result = {}
+        # print(data)
         result["sample_id"] = data["pk"]
         result.update(data["fields"])
         rows.append(result)
-    result = {"total": total, "rows": rows}
-    return HttpResponse(json.dumps(result))
+    return HttpResponse(json.dumps(rows))
 
-
-@csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
-@CheckAuthShouyang
-def updateSample(request):
-    # if request.method == "POST":
-    data = request.POST.copy().dict()
-    # report_id = data.pop("report_id")
-    data.pop('csrfmiddlewaretoken') if "csrfmiddlewaretoken" in data.keys() else data
-    # print(data)
-    Sample.objects.update_or_create(sample_id=request.POST.get("sample_id"), defaults=data)
-    # return render(request, 'zhongye/companyAdmin.html',{"reoprt_id":report_id})
-    result = {"statue": 200}
-    return HttpResponse(json.dumps(result))
 
 
 @csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
@@ -131,22 +115,32 @@ def sample_experiment(request):
 @csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
 @CheckAuthShouyang
 def updateSample(request):
+    data = request.POST.copy().dict()
+    data.pop('csrfmiddlewaretoken') if "csrfmiddlewaretoken" in data.keys() else data
+    Sample.objects.update_or_create(sample_id=request.POST.get("sample_id"), defaults=data)
+    result = {"statue": 200}
+    return HttpResponse(json.dumps(result))
+
+
+@csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
+@CheckAuthShouyang
+def createSample(request):
     # if request.method == "POST":
     data = request.POST.copy().dict()
     # report_id = data.pop("report_id")
     data.pop('csrfmiddlewaretoken') if "csrfmiddlewaretoken" in data.keys() else data
-
-    if "number" in data.keys():
-        number = data.pop("number")
-        for index in range(0, int(number)):
-            d = data.copy()
-            d["sample_number"] = data["sample_number"] + "-" + str(index+1)
-            if Sample.objects.filter(sample_number=d["sample_number"]).count() <= 0:
-               Sample.objects.create(**d)
+    if "sample_id" in data.keys():
+        sample = Sample.objects.get(sample_id = data['sample_id'])
+        if sample.sample_actual_id == None:
+            sample.sample_actual_id = sample.laiyang_id + '-1'
+            sample.save()
+            for index in range(1,sample.sample_number):
+                data = deepcopy(sample)
+                data.sample_id = None
+                data.sample_actual_id = data.laiyang_id + '-' + str(index+1)
+                data.save()
     else:
-        d = request.POST.copy().dict()
-        Sample.objects.update_or_create(sample_id=request.POST.get("id"), defaults=d)
-    # return render(request, 'zhongye/companyAdmin.html',{"reoprt_id":report_id})
+        Sample(sheet_id=data['sheet_id']).save()
     result = {"statue": 200}
     return HttpResponse(json.dumps(result))
 
@@ -224,14 +218,13 @@ def updateCompany(request):
 @CheckAuthShouyang
 def samIndexData(request):
     if request.method == "GET":
-        # order = request.GET.get("order", default="asc")
+        order = request.GET.get("order", default="asc")
         offset = int(request.GET.get("offset", default=0))
         limit = int(request.GET.get("limit", default=2000))
         search = request.GET.get("search", default="")
         if search == "":
             datas = CommissionSheet.objects.order_by("id").values("id", "report_id", "company_id", "date",
-                                                                  "project_name")[
-                    offset:offset + limit]
+                                                                  "project_name")[offset:offset + limit]
         else:
             datasCompanyIds = CommissionCompany.objects.filter(Q(company_name__contains=search)).values("id")
             datas = CommissionSheet.objects.filter(
@@ -262,11 +255,12 @@ def updateCommissionSheet(request):
     if request.method == "POST":
         if request.POST.get('id') == None:
             data = request.POST.copy().dict()
-            data['report_id'] = "建钢检字2020RX第027号"
-            data["project_name"] = ""
-            object, created = CommissionSheet.objects.update_or_create(id=request.POST.get('id'), defaults=data)
-            if created:
-                HttpResponse(request, "<script>alert('添加成功！')</script>")
+            # data['report_id'] = "建钢检字2020RX第027号"
+            # data["project_name"] = ""
+            com = CommissionSheet()
+            # CommissionSheet.objects.create(**{})
+            com.save()
+            HttpResponse(request, "<script>alert('添加成功！')</script>")
         else:
             data = request.POST.copy().dict()
             id = data.pop('id')
@@ -287,5 +281,3 @@ def updateCommissionSheetReport(request):  # 修改report的内容
         return render(request, 'zhongye/report.html', {"data": commission})
     else:
         return render(request, 'zhongye/report.html')
-
-

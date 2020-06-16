@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   {#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
-{#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">#}
+  {#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">#}
   <link rel="stylesheet" href="{% static 'sample/css/bootstrap4.1.0.min.css' %}">
-  <link rel="stylesheet" href="{% static 'sample/css/font-awesome4.7.0.min.css'%}">
+  <link rel="stylesheet" href="{% static 'sample/css/font-awesome4.7.0.min.css' %}">
   <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
   <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
@@ -52,7 +52,7 @@
     <div class="col-lg-4 form-inline">
       <label for="sample_statue">样品状态：</label>
       <select class="selectpicker form-control" id="sample_statue" data-container="body"
-              title="{{ data.sample_statue }}"  data-hide-disabled="true">
+              title="{{ data.sample_statue }}" data-hide-disabled="true">
         <option value="正常">正常</option>
         <option value="异常">异常</option>
       </select>
@@ -81,7 +81,7 @@
     data-pagination="true"
     data-id-field="id"
     data-page-list="[6,10, 25, 50, 100, all]"
-{#    data-detail-view="true"#}
+    {#    data-detail-view="true"#}
     data-side-pagination="server"
   >
   </table>
@@ -105,11 +105,16 @@
   var $table = $('#table')
   var columns = [{
     field: "sheet_id",
-    title: "sheet_id",
+    title:"sheet_id",
     visible: false
-  },{
+  }, {
     field: "sample_id",
-    title: "sample_id",
+    title: "sample_d",
+    visible: false
+  },
+    {
+    field: "sample_actual_id",
+      title: "sample_ac",
     visible: false
   },
     {
@@ -148,7 +153,6 @@
       valign: "middle",
       editable: {
         type: "text",
-        defaultValue:""
       }
     }, {
       field: "product_number",
@@ -170,11 +174,11 @@
   function initTable() {
     $table.bootstrapTable("destroy").bootstrapTable({
       columns: columns,
-      url: "/sample_index/loadSampleData/?sheet_id="+getQueryString("sheet_id"),
+      url: "/sample_index/loadSampleData/?sheet_id=" + getQueryString("sheet_id"),
       method: "get",
-      pageSize:6,
+      pageSize: 6,
       onEditableSave: function (field, row, oldValue, $el) {
-        var data = {"sample_id": row.sample_id, "sheet_id": getQueryString("sheet_id")};
+        var data = {"sample_id": row.sample_id,};
         data[field] = row[field]
         $.ajax({
           type: "POST",
@@ -184,46 +188,44 @@
             initTable();
           },
           error: function () {
+            initTable();
             alert('编辑失败');
           },
           complete: function () {
           }
         });
-      },
+      }
     })
   }
 
   function operateFormatter(value, row, index) {
-    var laiyang_id = row.laiyang_id;
-    return [
-      '<input type="button" onclick="sample(', row.sample_id,',',row.sample_number,',',"'",laiyang_id,"'",')" class="btn btn-info btn-sm" value="生成编号">'
-    ].join('')
+    {#console.log(row.sample_actual_id)#}
+    if (row.sample_actual_id != null) {
+      return [
+        '<input type="button" onclick="experiment(',row.sheet_id,',',row.laiyang_id,
+        ')" class="btn btn-primary btn-sm" value="查看试验">'
+        {#'<input type="button" onclick="sample(',row,')" class="btn btn-info btn-sm" value="生成编号">'#}
+      ].join('')
+    } else {
+      return [
+        '<input type="button" onclick="sample(',row.sample_id,')" class="btn btn-info btn-sm" value="生成编号">'
+        {#'<input type="button" onclick="sample(',row,')" class="btn btn-info btn-sm" value="生成编号">'#}
+      ].join('')
+    }
+
   }
 
-  function sample(sample_id,number,laiyang_id) {
-    if(laiyang_id==""){
-      layer.alert("来样编号不能为空！")
-      return
-    }
-    var reg = new RegExp("^[0-9]*$");
- {#if(!reg.test(obj.value)) alert("请输入数字!");#}
-    if( !reg.test(number)){
-      layer.alert("请在数量中输入合法数字！")
-      return
-    }
-    else if(number<=0){
-      layer.alert("数量不能小于0！")
-      return
-    }else if(number>=20){
-      layer.alert("请在数量中输入合法数字！")
-      return
-    }
+  function sample(sample_id) {
+
+    console.log(sample_id)
     $.ajax({
-      data: {"sample_id": sample_id, "number": number, "sample_number": laiyang_id},
-      url: "/sample_index/updateExperiment/",
+      data: {"sample_id":sample_id},
+      url: "/sample_index/createSample/",
       type: "POST",
       success: function (result) {
-        experiment(sample_id)
+        {#experiment(sheet_id)#}
+        layer.alert("生成编号成功!")
+        initTable()
       },
       error: function () {
         layer.alert("生成编号失败!")
@@ -231,20 +233,20 @@
     })
   }
 
-  function experiment(sample_id) {
+  function experiment(sheet_id,laiyang_id) {
     layer.open({
       type: 2,
       area: ['70%', '600px'],
       fixed: false, //不固定
       maxmin: true,
-      content: '/sample_index/sample_experiment/?sample_id='+sample_id,
+      content: '/sample_index/sample_experiment/?sheet_id=' + sheet_id+"&laiyang_id="+laiyang_id,
     });
   }
 
   $(document).ready(function () {
     $("#create").on("click", function () {
       $.ajax({
-        url: "/sample_index/updateSample/",
+        url: "/sample_index/createSample/",
         method: "POST",
         data: {"sheet_id": getQueryString("sheet_id")},
         success: function () {

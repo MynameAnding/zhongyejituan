@@ -1,94 +1,71 @@
-<!--实验人员首页表-->
-
 {% extends 'zhongye/base.html' %}
-{% load static from staticfiles %}
+{% load static %}
 {% block base %}
-  <div style="width: 80%;margin: 0 auto">
-  <div style="height: 200px;margin: 0 auto">
-    <h3 style="text-align: center;line-height: 200px"><span>实验人员首页表</span></h3>
-  </div>
+  <div style="width: 70%;margin: 0 auto">
+    <div>
+      <div
+        style="margin-top: 50px;width:100%;color: #2a6496;text-align: center;vertical-align: middle;font-family:'宋体';">
+        <img style="width: 500px;height: 300px;" src="{% static "sample/image/中冶LOGO.png" %}">
 
-
-
-<table
-  id="table"
-{#  data-toolbar="#toolbar"#}
-{#  data-search="true"#}
-  data-show-refresh="true"
-{#  data-show-toggle="true"#}
-  data-show-print="true"
-  data-show-fullscreen="true"
-{#  data-show-columns="true"#}
-{#  data-show-columns-toggle-all="true"#}
-{#  data-detail-view="true"#}
-  data-show-export="true"
-{#  data-click-to-select="true"#}
-{#  data-detail-formatter="detailFormatter"#}
-{#  data-minimum-count-columns="2"#}
-  data-show-pagination-switch="true"
-  data-pagination="true"
-  data-id-field="id"
-  data-page-list="[10, 25, 50, 100, all]"
-{#  data-show-footer="true"#}
-  data-side-pagination="server"
-  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
-{#  data-response-handler="responseHandler"#}
->
-</table>
-
-<script>
-  var $table = $('#table')
-
-
-  function initTable() {
-    $table.bootstrapTable('destroy').bootstrapTable({
-      {#height: 550,#}
-      locale: 'zh-CN',
-      columns: [
-        {
-          title: '试样编号',
-          field: 'sampleId',
-          align: 'center',
-          valign: 'middle',
-          sortable: true,
-        }, {
-          title: '样品名称',
-          field: 'sampleName',
-          align: 'center',
-          valign: 'middle',
-          sortable: true,
-        }, {
-          title: '检验依据',
-          field: 'basis',
-          align: 'center',
-          valign: 'middle',
-          sortable: true,
-        }, {
-          title: '要求完成时间',
-          field: 'deadline',
-          align: 'center',
-          valign: 'middle',
-          sortable: true,
-        }, {
-          field: 'operate',
-          title: '操作',
-          align: 'center',
-          clickToSelect: false,
-          events: window.operateEvents,
-          {#formatter: operateFormatter#}
+      </div>
+      <div id="boxes_exp">
+        <div id="outer_exp">
+          <div id="icon_exp" onclick="assignIndex()">
+            <img height="80px" style="margin-top: 10px" src="{% static 'flexbox/lali.png' %}">
+          </div>
+          <div id="title">
+            <span>拉力</span><br><span style="font-size: 15px; color: #c8c080">TENSION</span>
+          </div>
+        </div>
+        <div id="outer_exp">
+          <div id="icon_exp"><img height="55px" style="margin-top: 25px" src="{% static 'flexbox/wanqu.png' %}"></div>
+          <div id="title"><span>弯曲</span><br><span style="font-size: 12px; color: #c8c080">BENDING</span></div>
+        </div>
+        <div id="outer_exp">
+          <div id="icon_exp"><img height="58px" style="margin-top: 25px" src="{% static 'flexbox/fanwan.png' %}"></div>
+          <div id="title"><span>反弯</span><br><span style="font-size: 12px; color: #c8c080">REVERSE BENDING</span></div>
+        </div>
+        <div id="outer_exp">
+          <div id="icon_exp"><img height="40px" style="margin-top: 32px" src="{% static 'flexbox/huaxue.png' %}"></div>
+          <div id="title"><span>化学</span><br><span style="font-size: 12px; color: #c8c080">CHEMISTRY</span></div>
+        </div>
+        <div id="outer_exp">
+          <div id="icon_exp"><img height="50px" style="margin-top: 25px" src="{% static 'flexbox/jinxiang.png' %}">
+          </div>
+          <div id="title"><span>金相</span><br><span style="font-size: 12px; color: #c8c080">METALLOGRAPHY</span></div>
+        </div>
+        <div id="outer_exp">
+          <div id="icon_exp"><img height="35px" style="margin-top: 30px" src="{% static 'flexbox/qita.png' %}"></div>
+          <div id="title"><span>...</span><br><span style="font-size: 12px; color: #c8c080">ETC.</span></div>
+        </div>
+      </div>
+      <script type="text/javascript">
+        function assignIndex() {
+          window.location.href = "/experiment/?userID=" + {{ request.session.LoginSession.LoginId }};
         }
-      ]
-    })
+      </script>
 
-  }
+      <script>
+        var boxes = document.querySelectorAll('#boxes > div');
+        [].forEach.call(boxes, box => {
+          box.addEventListener('mousemove', e => {
+            document.body.style.setProperty(
+              '--bg-color',
+              box.style.getPropertyValue('--color')
+            );
 
-  $(function() {
-    initTable()
+            var size = parseInt(getComputedStyle(box).width);
 
+            // scaling
+            var x = size * .3 * .7 + .7 * e.offsetX;
+            var y = size * .3 * .7 + .7 * e.offsetY;
 
-  })
-</script>
-</div>
-
-
+            box.style.setProperty('--x', x);
+            box.style.setProperty('--y', y);
+            box.style.setProperty('--size', size);
+          });
+        });
+      </script>
+    </div>
+  </div>
 {% endblock base %}

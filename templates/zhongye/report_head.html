@@ -1,0 +1,400 @@
+{% load static %}
+{% block base %}
+
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/all.css' %}">
+  <script src="{% static 'base/js/jquery.min.js' %}"></script>
+  <script src="{% static 'base/js/layer.js' %}"></script>
+  <script src="{% static 'base/js/popper.min.js' %}"></script>
+
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-editable.css' %}">
+
+  <link rel="stylesheet" href="{% static 'base/css/bootstrap-table.min.css' %}">
+  <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-editable.js' %}"></script>
+  <script src="{% static 'base/js/bootstrap-table.js' %}"></script>
+
+{#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/common.js' %}"></script>
+
+
+  <script src="{% static 'base/js/tableExport.min.js' %}"></script>
+  {#  <script src="{% static 'base/js/bootstrap-table-editable.js' %}"></script>#}
+  <script src="{% static 'base/js/bootstrap-table-zh-CN.js' %}"></script>
+  {#  <script src="{% static 'base/js/layer.js' %}"></script>#}
+  <script
+    src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.16.0/extensions/print/bootstrap-table-print.min.js"></script>
+
+
+</head>
+
+<body style="width: 70%;margin: 0 auto;">
+<center>
+<img style="margin-top: 30px;" src="{% static 'flexbox/report_head.png' %}">
+</center>
+<div style="margin-top: 90px; font-weight: 100; font-family: 'Times New Roman'; ">
+
+  <table
+      style="font-family: '宋体'"
+    id="table"
+  >
+  </table>
+
+</div>
+
+<script>
+
+
+    var $table = $('#table')
+    var selection = []
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            {#url: "/reportHeadData/",#}
+            local: 'zh-CN',
+            method: "GET",
+            columns: [
+                [{
+                    title: '委托单编号',
+                    field: 'id',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='report_id'>{{ data.report_id }}</span>",
+                    field: 'report_id1',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '委 托 单 位',
+                    field: 'clients',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='company_name'>{{ data.company_name }}</span>",
+                    {#title: "/",#}
+                    field: 'company_name1',
+                    colspan: 2,
+                    align: 'left'
+                }], [{
+                    title: '工 程 名 称',
+                    field: 'enjNames',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='project_name'>{{ data.project_name }}</span>",
+                    field: 'project_name',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '委 托 时 间',
+                    field: 'dates',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='date'>{{ data.date }}</span>",
+                    field: 'date1',
+                    colspan: 2,
+                    align: 'left'
+                }], [{
+                    title: '试 样 名 称',
+                    field: 'sampleNames',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='sample_name'>{{ data.sample_name }}</span>",
+                    field: 'sampleName',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '送样(联系)人',
+                    field: 'contacts',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='contactor'>{{ data.contactor }}</span>",
+                    field: 'contact',
+                    colspan: 2,
+                    align: 'left'
+                }], [{
+                    title: '检 验 依 据',
+                    field: 'basiss',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='test_basis'>{{ data.test_basis }}</span>",
+                    field: 'basis',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '规 格 型 号',
+                    field: 'specifications',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='brand_grade'>{{ data.brand_grade }}</span>",
+                    field: 'specification1',
+                    colspan: 2,
+                    align: 'left'
+                }], [{
+                    title: '牌 号 级 别',
+                    field: 'grades',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='d'>{{ data.d }}</span>",
+                    field: 'grade1',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '产 品 批 号',
+                    field: 'produceNumbers',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='product_number'>{{ data.product_number }}</span>",
+                    field: 'produceNumber1',
+                    colspan: 2,
+                    align: 'left'
+                }], [{
+                    title: '试 样 编 号',
+                    field: 'sampleIds',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='sample_id_first'>{{ data.sample_id_first }}</span>",
+                    field: 'sampleId1',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '-',
+                    field: 'connection',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='sample_id_last'>{{ data.sample_id_last }}</span>",
+                    field: 'sampleId2',
+                    colspan: 2,
+                    align: 'left'
+
+                }], [{
+                    title: '送 样 数 量',
+                    field: 'givingNumbers',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='number'>{{ data.number }}</span>",
+                    field: 'number',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '试 样 数 量',
+                    field: 'sampleNumbers',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='sample_number'>{{ data.sample_number }}</span>",
+                    field: 'sampleNumber1',
+                    colspan: 2,
+                    align: 'left'
+                }], [{
+                    title: '交 货 形 式',
+                    field: 'givingModes',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='jiaohuo'>{{ data.jiaohuo }}</span>",
+                    field: 'givingMode1',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '样 品 状 态',
+                    field: 'sampleStatuss',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='sample_state'>{{ data.sample_state }}</span>",
+                    field: 'state',
+                    colspan: 2,
+                    align: 'left'
+                }], [{
+                    title: '检 验 项 目',
+                    field: 'testItems',
+                    colspan: 1,
+                    rowspan: 4,
+                    valign: 'middle',
+                    align: 'center'
+                }, {
+                    title: '拉伸',
+                    field: 'lashen',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: '弯曲',
+                    field: 'wanqu',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: '反弯',
+                    field: 'fanwan',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: '化学',
+                    field: 'huaxue',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: '金相',
+                    field: 'huaxue',
+                    colspan: 1,
+                    align: 'center'
+                }], [{
+                    title: "<span id='lashen'>{{ data.lashen }}</span>",
+                    field: 'lashen1',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='wanqu'>{{ data.wanqu }}</span>",
+                    field: 'wanqu1',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='fanwan'>{{ data.fanwan }}</span>",
+                    field: 'fanwan1',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='huaxue'>{{ data.huaxue }}</span>",
+                    field: 'huaxue',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='jinxiang'>{{ data.jinxiang }}</span>",
+                    field: 'jinxiang',
+                    colspan: 1,
+                    align: 'center'
+                }], [{
+                    title: '尺寸',
+                    field: 'chicun',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: '表面标志',
+                    field: 'biaomianbiaozhi',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: '表面质量',
+                    field: 'biaomianzhiliang',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: '重量偏差',
+                    field: 'zhongliangpiancha',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: 'ceq',
+                    field: 'ceq',
+                    colspan: 1,
+                    align: 'center'
+                }], [{
+                    title: "<span id='chicun'>{{ data.chicun }}</span>",
+                    field: 'chicun1',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='biaomianbiaozhi'>{{ data.biaomianbiaozhi }}</span>",
+                    field: '表面标志1',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='biaomianzhiliang'>{{ data.biaomianzhiliang }}</span>",
+                    field: '表面质量1',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='zhongliangpiancha'>{{ data.zhongliangpiancha }}</span>",
+                    field: 'zhonglaingpiancha',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: "<span id='ceq'>{{ data.ceq }}</span>",
+                    field: 'ceq',
+                    colspan: 1,
+                    align: 'center'
+                }], [{
+                    title: '检 验 结 论',
+                    field: 'conclusions',
+                    colspan: 1,
+                    align: 'center',
+                }, {
+                    title: '   <a href="#"  id = "conclusion" data-type="text" data-pk="{{ data.report_id }}" data-url="/updateReportHead/">{{ data.conclusion }}</a>',
+                    field: 'conclusion',
+                    colspan: 5,
+                    align: 'left'
+                }], [{
+                    title: '备    注',
+                    field: 'remarks',
+                    colspan: 1,
+                    align: 'center',
+                }, {
+                    title: '/',
+                    field: 'remark',
+                    colspan: 2,
+                    align: 'left'
+                }, {
+                    title: '签 发 日 期',
+                    field: 'provideDate',
+                    colspan: 1,
+                    align: 'center'
+                }, {
+                    title: '/',
+                    field: 'time',
+                    colspan: 2,
+                    align: 'left'
+                }]
+            ],
+
+        })
+        $table.on('check.bs.table uncheck.bs.table' +
+          'check-all.bs.table uncheck-all.bs.table',
+      function () {
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+          selections = getIdSelections()
+      })
+
+      $table.on('all.bs.table', function (e, name, args) {
+          console.log(name, args)
+      })
+    }
+    $(function () {
+        initTable()
+      $("tbody").remove()
+      })
+    $(document).ready(function () {
+        editable()
+    })
+
+    function editable() {
+            $("#conclusion").editable({
+                title: "检验结论"
+            })
+        }
+</script>
+</div>
+
+
+</body>
+{% endblock base %}

@@ -1,0 +1,21 @@
+{% extends 'zhongye/base.html' %}
+{% load static %}
+{% block base %}
+<div style="width: 80%;margin: 0 auto">
+    <div>
+        <div id="boxes">
+            <div id="outer"><div id="icon"  onclick="assignIndex()"><img height="60px" style="margin-top: 10px" src="{% static 'flexbox/lali.png' %}"></div>拉力</div>
+            <div id="outer"><div id="icon"><img height="55px" style="margin-top: 12px" src="{% static 'flexbox/wanqu.png' %}"></div>弯曲</div>
+            <div id="outer"><div id="icon"><img height="55px" style="margin-top: 12px" src="{% static 'flexbox/fanwan.png' %}"></div>反弯</div>
+            <div id="outer"><div id="icon"><img height="35px" style="margin-top: 22px" src="{% static 'flexbox/huaxue.png' %}"></div>化学</div>
+            <div id="outer"><div id="icon"><img height="45px" style="margin-top: 15px" src="{% static 'flexbox/jinxiang.png' %}"></div>金相</div>
+            <div id="outer"><div id="icon"><img height="30px" style="margin-top: 22px" src="{% static 'flexbox/qita.png' %}"></div>...</div>
+        </div>
+        <script type="text/javascript">
+                function assignIndex() {
+                    window.location.href = "/assignment_index/";
+                }
+        </script>
+    </div>
+</div>
+{% endblock base %}

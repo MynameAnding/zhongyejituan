@@ -67,17 +67,16 @@
 <script>
 
   var $table = $('#table')
-  var columns = [{
-    field: "id",
-    title: "id",
-    visible: false
-  },
+  var columns = [
+  {#  field: "id",#}
+  {#  title: "id",#}
+  {#  visible: false#}
     {
       field: "sample_id",
       title: "规格",
       visible: false
     }, {
-      field: "sample_number",
+      field: "sample_actual_id",
       title: "试样编号",
       align: "center",
       valign: "middle",
@@ -88,9 +87,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='lashen' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='lashen' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='lashen' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='lashen' onclick='change(this)'>"
         }
       }
     }, {
@@ -100,9 +99,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='wanqu' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='wanqu' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='wanqu' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='wanqu' onclick='change(this)'>"
         }
       }
     }, {
@@ -112,9 +111,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='fanwan' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='fanwan' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='fanwan' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='fanwan' onclick='change(this)'>"
         }
       }
     }, {
@@ -124,9 +123,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='huaxue' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='huaxue' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='huaxue' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='huaxue' onclick='change(this)'>"
         }
       }
     }, {
@@ -136,9 +135,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='jinxiang' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='jinxiang' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='jinxiang' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='jinxiang' onclick='change(this)'>"
         }
       }
     }, {
@@ -148,9 +147,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='chicun' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='chicun' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='chicun' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='chicun' onclick='change(this)'>"
         }
       }
     }, {
@@ -160,9 +159,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='biaomianbiaozhi' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='biaomianbiaozhi' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='biaomianbiaozhi' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='biaomianbiaozhi' onclick='change(this)'>"
         }
       }
     }, {
@@ -172,9 +171,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='zhongliangpiancha' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='zhongliangpiancha' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='zhongliangpiancha' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='zhongliangpiancha' onclick='change(this)'>"
         }
       }
     }, {
@@ -184,9 +183,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked type ='checkbox' id = '" + row.id + "' name='biaomianzhiliang' onclick='change(this)'>"
+          return "<input checked type ='checkbox' id = '" + row.sample_id + "' name='biaomianzhiliang' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='biaomianzhiliang' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='biaomianzhiliang' onclick='change(this)'>"
         }
       }
     }, {
@@ -196,9 +195,9 @@
       valign: "middle",
       formatter: function (value, row, index) {
         if (value == 1) {
-          return "<input checked id = '" + row.id + "'type ='checkbox' name='ceq' onclick='change(this)'>"
+          return "<input checked id = '" + row.sample_id + "'type ='checkbox' name='ceq' onclick='change(this)'>"
         } else {
-          return "<input  type ='checkbox' id = '" + row.id + "' name='ceq' onclick='change(this)'>"
+          return "<input  type ='checkbox' id = '" + row.sample_id + "' name='ceq' onclick='change(this)'>"
         }
       }
     }
@@ -207,11 +206,11 @@
   function change(that) {
     {#layer.alert(that.checked)#}
     var data = {}
-    data["id"] = that.id;
+    data["sample_id"] = that.id;
     data[that.name] = that.checked ? 1 : 0
     $.ajax({
       data: data,
-      url: "/sample_index/updateExperiment/",
+      url: "/sample_index/updateSample/",
       type: "POST",
       success: function () {
 
@@ -225,29 +224,22 @@
   function initTable() {
     $table.bootstrapTable("destroy").bootstrapTable({
       columns: columns,
-      url: "/sample_index/loadExperimentData/?sample_id=" + getQueryString("sample_id"),
+
+      url: "/sample_index/loadSampleData/?sheet_id=" + getQueryString("sheet_id")+"&laiyang_id="+getQueryString("laiyang_id"),
       method: "GET",
-      pageSize:5
     })
   }
 
-  function operateFormatter(value, row, index) {
-    return [
-      '<input type="button" onclick="sample(' + row + ')" class="btn btn-info btn-sm" value="生成编号">'
-    ].join('')
-  }
+
 
   $(function () {
     {#buildTable($table, 8, 2)#}
+    console.log(getQueryString("sheet_id"),getQueryString("laiyang_id"))
     initTable()
 
   })
 
-  $(document).ready(function () {
-    $("input").on('click', function () {
 
-    })
-  })
 
 
 </script>

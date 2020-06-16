@@ -1,17 +1,15 @@
 {% extends 'zhongye/base.html' %}
-{% load static from staticfiles %}
+{% load static %}
 {% block base %}
-  <div style="width: 80%;margin: 0 auto">
-  <div style="height: 200px;margin: 0 auto">
-    <h3 style="text-align: center;line-height: 200px"><span>审批人员检验报告表格</span></h3>
-  </div>
+  <div style="width: 80%;margin: 0 auto;margin-top: 100px;">
+
     <!--审批人员检验报告表格-->
 
 
 
 
     <table id="table"
-{#           data-toolbar="#toolbar"#}
+           data-toolbar="#toolbar"
 {#           data-search="true"#}
            data-show-refresh="true"
            data-show-print="true"
@@ -37,18 +35,24 @@
     <script>
       var $table = $('#table')
 
-
-
       function initTable() {
         $table.bootstrapTable('destroy').bootstrapTable({
           {#height: 550,#}
-          pagination: false,
-          locale: 'zh-CN',
+          {#  pagination: false,#}
+            locale: 'zh-CN',
+            {#url: "/approval_report/",#}
+            method: "GET",
+            {#onloadend:initForm(),#}
           columns: [
             [{
-              title: '报告编号',
+              title: '委托单编号',
               field: 'id',
-              colspan: 6,
+              colspan: 1,
+              align: 'center'
+            }, {
+              title: "<span id='report_id'>{{ data.report_id }}</span>",
+              field: 'report_id1',
+              colspan: 5,
               align: 'center'
             }], [{
               title: '委托单位',
@@ -56,9 +60,9 @@
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
-              field: 'client',
-              colspan: 3,
+              title: "<span id='company_name'>{{ data.company_name }}</span>",
+              field: 'company_name1',
+              colspan: 2,
               align: 'center'
             }, {
               title: '委托时间',
@@ -66,9 +70,9 @@
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
-              field: 'date',
-              colspan: 1,
+              title: "<span id='date'>{{ data.date }}</span>",
+              field: 'date1',
+              colspan: 2,
               align: 'center'
             }], [{
               title: '工程名称',
@@ -76,9 +80,9 @@
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
-              field: 'enjName',
-              colspan: 3,
+              title: "<span id='project_name'>{{ data.project_name }}</span>",
+              field: 'project_name',
+              colspan: 2,
               align: 'center'
             }, {
               title: '送样（联系）人',
@@ -88,7 +92,7 @@
             }, {
               title: '/',
               field: 'contact',
-              colspan: 1,
+              colspan: 2,
               align: 'center'
             }], [{
               title: '试样名称',
@@ -96,7 +100,7 @@
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
+              title: "<span id='sample_name'>{{ data.sample_name }}</span>",
               field: 'sampleName',
               colspan: 5,
               align: 'center'
@@ -106,7 +110,7 @@
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
+              title: "<span id='test_basis'>{{ data.test_basis }}</span>",
               field: 'basis',
               colspan: 5,
               align: 'center'
@@ -116,14 +120,9 @@
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
+              title: "<span id='d1'>{{ data.d1 }}</span>",
               field: 'specification1',
               colspan: 3,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'specification2',
-              colspan: 2,
               align: 'center'
             }], [{
               title: '牌号级别',
@@ -131,14 +130,9 @@
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
+              title: "<span id='brand_grade1'>{{ data.brand_grade1 }}</span>",
               field: 'grade1',
               colspan: 3,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'grade2',
-              colspan: 2,
               align: 'center'
             }], [{
               title: '产品批号',
@@ -150,11 +144,6 @@
               field: 'produceNumber1',
               colspan: 3,
               align: 'center'
-            }, {
-              title: '/',
-              field: 'produceNumber2',
-              colspan: 2,
-              align: 'center'
             }], [{
               title: '试样编号',
               field: 'sampleIds',
@@ -165,25 +154,15 @@
               field: 'sampleId1',
               colspan: 3,
               align: 'center'
-            }, {
-              title: '/',
-              field: 'sampleId2',
-              colspan: 2,
-              align: 'center'
             }], [{
               title: '送样数量',
               field: 'givingNumbers',
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
-              field: 'givingNumber1',
+              title: "<span id='number'>{{ data.number }}</span>",
+              field: 'number',
               colspan: 3,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'givingNumber2',
-              colspan: 2,
               align: 'center'
             }], [{
               title: '试样数量',
@@ -195,11 +174,6 @@
               field: 'sampleNumber1',
               colspan: 3,
               align: 'center'
-            }, {
-              title: '/',
-              field: 'sampleNumber2',
-              colspan: 2,
-              align: 'center'
             }], [{
               title: '交货形式',
               field: 'givingModes',
@@ -210,19 +184,14 @@
               field: 'givingMode1',
               colspan: 3,
               align: 'center'
-            }, {
-              title: '/',
-              field: 'givingMode2',
-              colspan: 2,
-              align: 'center'
             }], [{
               title: '检验项目',
               field: 'testItems',
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
-              field: 'testItem',
+              title: "<span id='items'>{{ data.items }}</span>",
+              field: 'items',
               colspan: 5,
               align: 'center'
             }], [{
@@ -231,8 +200,8 @@
               colspan: 1,
               align: 'center'
             }, {
-              title: '/',
-              field: 'sampleStatus',
+              title: "<span id='sample_state'>{{ data.sample_state }}</span>",
+              field: 'state',
               colspan: 5,
               align: 'center'
             }], [{
@@ -259,66 +228,6 @@
               title: '签发日期',
               field: 'provideDate',
               colspan: 2,
-              align: 'center'
-            }], [{
-              title: '批准',
-              field: 'approvals',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'approval',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '审核',
-              field: 'examines',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'examine',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '编写',
-              field: 'writes',
-              colspan: 1,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'write',
-              colspan: 1,
-              align: 'center'
-            }], [{
-              title: '产品牌号',
-              field: 'grades',
-              colspan: 3,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'grade',
-              colspan: 3,
-              align: 'center'
-            }], [{
-              title: '试样规格',
-              field: 'specifications',
-              colspan: 3,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'specification',
-              colspan: 3,
-              align: 'center'
-            }], [{
-              title: '产品批号',
-              field: 'samplesNumbers',
-              colspan: 3,
-              align: 'center'
-            }, {
-              title: '/',
-              field: 'samplesNumber',
-              colspan: 3,
               align: 'center'
             }], [{
               title: '试样编号',
@@ -552,8 +461,29 @@
 
       }
 
+    {#  function initForm(){#}
+    {#console.log($("#weituodan").innerText)#}
+    {#    $.ajax({#}
+    {#        type:"GET",#}
+    {#        url:"/approvalReportData/",#}
+            {#data: {"report_id":  {{report_id}} },#}
+    {#        success:function(result) {#}
+    {#            console.log(jQuery.parseJSON(result))#}
+    {#            result = jQuery.parseJSON(result)#}
+    {#            for (var key in result["data"]){#}
+    {#                console.log(key, result["data"][key])#}
+    {#                $("#"+key).append(result["data"][key])#}
+    {#            }#}
+    {#        },#}
+    {#        error:function(result){#}
+    {##}
+    {#        }#}
+    {#    })#}
+    {# }#}
+
       $(function () {
         initTable()
+        $("tbody").remove();
       })
     </script>
   </div>
