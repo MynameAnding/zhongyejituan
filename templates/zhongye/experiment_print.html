@@ -44,7 +44,9 @@
 <body>
 
 <div style="width: 90%;margin: 0 auto">
-
+    <div style="height: 100px;margin: 0 auto">
+      <h3 style="text-align: center;line-height: 100px"><span>原始记录表</span></h3>
+    </div>
 
 <table
   id="table"
@@ -232,10 +234,10 @@
           type:"get",
           url:"/LoadExpInformation/?userID=" + {{ userID }},
           success:function(result) {
-              console.log(jQuery.parseJSON(result));
+              {# console.log(jQuery.parseJSON(result)); #}
             result = jQuery.parseJSON(result);
             for(var key in result["data"][0]){
-              console.log(key,result["data"][0][key]);
+              {# console.log(key,result["data"][0][key]); #}
               $("#"+key).append(result["data"][0][key]);
             }
           },

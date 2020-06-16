@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^', include(('zhongyeControl.urls', 'zhongye'), namespace='zhongye')),
     url(r'^', include(('zhongyeControl.urls_approval', 'approval'), namespace='approval')),
     url(r'^', include(('zhongyeControl.urls_assign', 'assign'), namespace='assign')),
-    url(r'^', include(('zhongyeControl.urls_admin', 'admin'), namespace='admin2')),
+    url(r'^', include(('zhongyeControl.urls_admin', 'admin'), namespace='admin')),
+    url(r'^', include(('zhongyeControl.urls_test', 'test'), namespace='test')),
 ]

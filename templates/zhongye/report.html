@@ -44,8 +44,8 @@
 
 
 <div>
-  <div style="width: 80%;margin:0 auto;margin-top: 20px;">
-    <table id="table" data-show-refresh="true">
+  <div style="width: 80%;margin:0 auto;margin-top: 40px;">
+    <table id="table" >
     </table>
     <script>
       var $table = $('#table')
@@ -84,7 +84,7 @@
               align: 'center',
               valign: "middle"
             }, {
-              title: '<a href="#" id="date" data-type="datetime"  data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/" title="委托日期">{{ data.date }}</a>',
+              title: '<a href="#" id="date" data-type="date"  data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/" title="委托日期">{{ data.date }}</a>',
               colspan: 2,
               align: 'center',
               valign: "middle"
@@ -166,7 +166,7 @@
               align: 'center',
               valign: "middle"
             }, {
-              title: '<a href="#"  id = "sample_state" data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.sample_state }}</a>',
+              title: '<a href="#"  id = "period" data-type="select" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.period }}</a>',
               colspan: 5,
               align: 'center',
               valign: "middle"
@@ -211,7 +211,7 @@
               align: 'center',
               valign: "middle"
             }, {
-              title: ' <a href="#"  id = "remarks" data-type="textarea" data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.remarks }}</a>',
+              title: ' <a href="#"  id = "remarks"  data-pk="{{ data.id }}" data-url="/sample_index/updateCommissionSheetReport/">{{ data.remarks }}</div>',
               colspan: 5,
               align: 'center',
               valign: "middle"
@@ -236,7 +236,7 @@
           source: [{value: "1", text: "一般"}, {value: "2", text: "见证"}, {value: "3", text: "仲裁"}],
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -248,7 +248,7 @@
           title: "工程名字",
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -256,12 +256,14 @@
           }
         })
         $("#number").editable({
-
           {#placement: "bottom",#}
           {#showbuttons:"bottom",#}
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
+            }
+            else if(!isNaN(value)){
+              return "请输入数字！"
             }
           },
           success: function (value) {
@@ -269,12 +271,12 @@
           }
         })
         $("#deposit").editable({
-          showbuttons:"bottom",
+          {#showbuttons:"bottom",#}
           {#defaultValue: "样品数量",#}
           {#source: [{value: "1", text: "1"}, {value: "2", text: "5"}, {value: "3", text: "10"}],#}
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -283,11 +285,11 @@
         })
         $("#delivery").editable({
           {#type: "select",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
-          title: '发出方式',//编辑框的标题
+          {#title: '发出方式',//编辑框的标题#}
           source: [{value: "1", text: "自取"}, {value: "2", text: "邮寄"}],
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -299,7 +301,7 @@
           source: [{value: "1", text: "中心加工"}, {value: "2", text: "委托方加工"}],
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -311,7 +313,7 @@
           source: [{value: "1", text: "中文报告"}, {value: "2", text: "英文报告"}],
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -323,7 +325,7 @@
           source: [{value: "1", text: "由检方处理"}, {value: "2", text: "委托方取回"}],
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -332,13 +334,13 @@
         })
 
         $("#date").editable({
-          viewformat: 'yyyy/mm/dd hh:ii',
+          viewformat: 'yyyy-mm-dd',
           url: "/sample_index/updateCommissionSheetReport/",
           pk: getQueryString("id"),
           showbuttons: "bottom",
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -348,12 +350,13 @@
 
 
           $("#remarks").editable({
-            {#type: "textarea",#}
+            type: "text",
             title: "备注",
-            placement:"top",
+            {#placement:"top",#}
+            {#showbuttons: "bottom",#}
             validate: function (value) {
               if ($.trim(value) == '') {
-                return 'This field is required';
+                return '请输入内容！';
               }
             },
             success: function (value) {
@@ -362,10 +365,10 @@
           })
         $("#invoice").editable({
 
-          source: [{value: "1", text: "普通发票"}, {value: "2", text: "增值税发票"}, {value: "3", text: "不开票"}],
+          source: [{value: "普通发票", text: "普通发票"}, {value: "增值税发票", text: "增值税发票"}, {value: "不开票", text: "不开票"}],
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -389,8 +392,8 @@
           {#type: "text",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
           showbuttons:"bottom",
           validate: function (value) {
-            if (isNaN(value)) {
-              return '输入错误';
+            if (!isNaN(value)) {
+              return '请输入数字！';
             }
           },
           success: function (value) {
@@ -402,7 +405,7 @@
           placehoder: "费用",
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {
@@ -411,10 +414,10 @@
         })
         $("#sample_state").editable({
           {#type: "text",                //编辑框的类型。支持text|textarea|select|date|checklist等#}
-          source:[{value:1,text:"正常"},{value:2,text:"加急"}],
+          source:[{value:"正常",text:"正常"},{value:"加急",text:"加急"}],
           validate: function (value) {
             if ($.trim(value) == '') {
-              return 'This field is required';
+              return '请输入内容！';
             }
           },
           success: function (value) {

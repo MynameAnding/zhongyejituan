@@ -1,71 +1,21 @@
 {% extends 'zhongye/base.html' %}
 {% load static %}
 {% block base %}
-  <div style="width: 70%;margin: 0 auto">
+<div style="width: 70%;margin: 0 auto">
     <div>
-      <div
-        style="margin-top: 50px;width:100%;color: #2a6496;text-align: center;vertical-align: middle;font-family:'宋体';">
-        <img style="width: 500px;height: 300px;" src="{% static "sample/image/中冶LOGO.png" %}">
-
-      </div>
-      <div id="boxes_exp">
-        <div id="outer_exp">
-          <div id="icon_exp" onclick="assignIndex()">
-            <img height="80px" style="margin-top: 10px" src="{% static 'flexbox/lali.png' %}">
-          </div>
-          <div id="title">
-            <span>拉力</span><br><span style="font-size: 15px; color: #c8c080">TENSION</span>
-          </div>
+        <div id="boxes">
+            <div id="outer"><div id="icon"  onclick="assignIndex()"><img height="60px" style="margin-top: 10px" src="{% static 'flexbox/lali.png' %}"></div>拉力</div>
+            <div id="outer"><div id="icon"><img height="55px" style="margin-top: 12px" src="{% static 'flexbox/wanqu.png' %}"></div>弯曲</div>
+            <div id="outer"><div id="icon"><img height="55px" style="margin-top: 12px" src="{% static 'flexbox/fanwan.png' %}"></div>反弯</div>
+            <div id="outer"><div id="icon"><img height="35px" style="margin-top: 22px" src="{% static 'flexbox/huaxue.png' %}"></div>化学</div>
+            <div id="outer"><div id="icon"><img height="45px" style="margin-top: 15px" src="{% static 'flexbox/jinxiang.png' %}"></div>金相</div>
+            <div id="outer"><div id="icon"><img height="30px" style="margin-top: 22px" src="{% static 'flexbox/qita.png' %}"></div>...</div>
         </div>
-        <div id="outer_exp">
-          <div id="icon_exp"><img height="55px" style="margin-top: 25px" src="{% static 'flexbox/wanqu.png' %}"></div>
-          <div id="title"><span>弯曲</span><br><span style="font-size: 12px; color: #c8c080">BENDING</span></div>
-        </div>
-        <div id="outer_exp">
-          <div id="icon_exp"><img height="58px" style="margin-top: 25px" src="{% static 'flexbox/fanwan.png' %}"></div>
-          <div id="title"><span>反弯</span><br><span style="font-size: 12px; color: #c8c080">REVERSE BENDING</span></div>
-        </div>
-        <div id="outer_exp">
-          <div id="icon_exp"><img height="40px" style="margin-top: 32px" src="{% static 'flexbox/huaxue.png' %}"></div>
-          <div id="title"><span>化学</span><br><span style="font-size: 12px; color: #c8c080">CHEMISTRY</span></div>
-        </div>
-        <div id="outer_exp">
-          <div id="icon_exp"><img height="50px" style="margin-top: 25px" src="{% static 'flexbox/jinxiang.png' %}">
-          </div>
-          <div id="title"><span>金相</span><br><span style="font-size: 12px; color: #c8c080">METALLOGRAPHY</span></div>
-        </div>
-        <div id="outer_exp">
-          <div id="icon_exp"><img height="35px" style="margin-top: 30px" src="{% static 'flexbox/qita.png' %}"></div>
-          <div id="title"><span>...</span><br><span style="font-size: 12px; color: #c8c080">ETC.</span></div>
-        </div>
-      </div>
-      <script type="text/javascript">
-        function assignIndex() {
-          window.location.href = "/experiment/?userID=" + {{ request.session.LoginSession.LoginId }};
-        }
-      </script>
-
-      <script>
-        var boxes = document.querySelectorAll('#boxes > div');
-        [].forEach.call(boxes, box => {
-          box.addEventListener('mousemove', e => {
-            document.body.style.setProperty(
-              '--bg-color',
-              box.style.getPropertyValue('--color')
-            );
-
-            var size = parseInt(getComputedStyle(box).width);
-
-            // scaling
-            var x = size * .3 * .7 + .7 * e.offsetX;
-            var y = size * .3 * .7 + .7 * e.offsetY;
-
-            box.style.setProperty('--x', x);
-            box.style.setProperty('--y', y);
-            box.style.setProperty('--size', size);
-          });
-        });
-      </script>
+        <script type="text/javascript">
+                function assignIndex() {
+                    window.location.href = "/experiment/?userID=" + {{ request.session.LoginSession.LoginId }};
+                }
+        </script>
     </div>
-  </div>
+</div>
 {% endblock base %}

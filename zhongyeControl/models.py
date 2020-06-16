@@ -6,7 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from datetime import datetime
+import time
 
 
 class Allusers(models.Model):
@@ -124,27 +124,27 @@ class CommissionCompany(models.Model):
 
 
 class CommissionSheet(models.Model):
-    period = models.CharField(max_length=2, blank=True, null=True)
+    period = models.CharField(max_length=20, blank=True, null=True,default='正常')
     laiyang_id = models.CharField(max_length=255, blank=True, null=True)
-    delivery = models.CharField(max_length=2, blank=True, null=True)
+    delivery = models.CharField(max_length=10, blank=True, null=True,default='邮寄')
     sample_name = models.CharField(max_length=255, blank=True, null=True)
-    type = models.CharField(max_length=10, blank=True, null=True,default="一般")
+    type = models.CharField(max_length=10, blank=True, null=True,default='一般')
     sample_state = models.CharField(max_length=255, blank=True, null=True)
     number = models.IntegerField(blank=True, null=True)
-    date = models.DateTimeField(blank=True, null=True,default=datetime.now())
-    presentation = models.CharField(max_length=4, blank=True, null=True)
-    processing_method = models.CharField(max_length=5, blank=True, null=True)
+    date = models.CharField(max_length=20,blank=True, null=True,default=time.strftime("%Y-%m-%d", time.localtime()))
+    presentation = models.CharField(max_length=10, blank=True, null=True,default="中文报告")
+    processing_method = models.CharField(max_length=10, blank=True, null=True,default="中心加工")
     manufactory = models.CharField(max_length=255, blank=True, null=True)
     project_name = models.CharField(max_length=255, blank=True, null=True)
-    sample_disposal = models.CharField(max_length=5, blank=True, null=True)
+    sample_disposal = models.CharField(max_length=10, blank=True, null=True,default='由检方处理')
     fee = models.FloatField(blank=True, null=True)
     deposit = models.FloatField(blank=True, null=True)
     report_id = models.CharField(max_length=255)
     test_basis = models.CharField(max_length=255)
     company_id = models.IntegerField(blank=True, null=True)
-    invoice = models.CharField(max_length=30)
+    invoice = models.CharField(max_length=30,default="增值税发票")
     remarks = models.CharField(max_length=255, blank=True, null=True)
-    jiaohuo = models.CharField(max_length=2, blank=True, null=True)
+    jiaohuo = models.CharField(max_length=10, blank=True, null=True,default="直条")
     conclusion = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -207,30 +207,6 @@ class OriginalSample(models.Model):
     class Meta:
         managed = False
         db_table = 'original_sample'
-
-
-class Professors(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    name = models.CharField(max_length=20)
-    danwei = models.CharField(max_length=50)
-    zhengzhimianmao = models.CharField(max_length=50)
-    zhiwu = models.CharField(max_length=30)
-    zhicheng = models.CharField(max_length=15)
-    shenfenzhenghao = models.CharField(max_length=54)
-    lianxidianhua = models.CharField(max_length=45)
-    kechengmingcheng = models.CharField(max_length=150)
-    kaihuhang = models.CharField(max_length=60)
-    kahao = models.CharField(max_length=60)
-    shehuijianzhi = models.CharField(max_length=150)
-    jianjie = models.CharField(max_length=600)
-    hezuoqingkuang = models.CharField(max_length=60)
-    zhengzhibiaoxian = models.CharField(max_length=30)
-    shoukejilu = models.CharField(max_length=150)
-    labels = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'professors'
 
 
 class Sample(models.Model):
@@ -342,7 +318,7 @@ class Tension(models.Model):
     temperature = models.FloatField(blank=True, null=True)
     get_people = models.IntegerField(blank=True, null=True)
     remark = models.CharField(max_length=255, blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
     measuring_name = models.CharField(max_length=255, blank=True, null=True)
     measuring_id = models.IntegerField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)

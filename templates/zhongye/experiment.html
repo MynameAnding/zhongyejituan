@@ -27,26 +27,13 @@
 </table>
 
 
-<div id="toolbar">
+<div id="toolbar" style="margin-bottom: 30px">
     <button type="button" id="start_test" class="btn btn-danger" onclick="startTime()" > 开始实验</button>
     <button type="button" id="end_test" class="btn btn-danger" onclick="endTime()" > 刷新</button>
     <button type="button" id="save" class="btn btn-danger" onclick="myCheck()">保存</button>
 </div>
 
-<table
-  id="table"
-  data-toolbar="#toolbar"
-
-  data-show-pagination-switch="true"
-  data-pagination="true"
-  data-id-field="id"
-{#  data-show-print="true"#}
-  data-page-list="[10, 25, 50, 100, all]"
-{#  data-show-footer="true"#}
-  data-side-pagination="server"
-{#  data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"#}
-{#  data-response-handler="responseHandler">#}
-    >
+<table id="table">
 </table>
 </form>
 
@@ -63,7 +50,7 @@
         '<input type = "hidden" name="userID" value = "',
         {{userID}},
         '" >',
-        '<button type="submit" id="wrong" class="btn btn-danger" > 确定</button>',
+        '<button type="submit" id="wrong" class="btn btn-danger" > 退回</button>',
         '</form>',
     ].join('')
   }
@@ -100,78 +87,6 @@
             }, {
               title: '规格',
               field: 'd',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            }, {
-              title: '屈服负荷<br>kN<br>FP0.2',
-              field: 'yeild_load',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            },{
-              title: '屈服强度<br>MPa<br>Rp0.2',
-              field: 'rel',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            }, {
-              title: '最大负荷<br>kN Fm',
-              field: 'peak_load',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            },{
-              title: '抗拉强度<br>MPa Rm',
-              field: 'rm',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            },{
-              title: '原始标距<br>mm',
-              field: 'origin_gauge',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            },{
-              title: '断后标距<br>mm',
-              field: 'post_break_gauge',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            },  {
-              title: '伸长率<br>%',
-              field: 'a',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            }, {
-              title: '最大力<br>原始标距<br>mm',
-              field: 'max_n_origin',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            }, {
-              title: '最大力<br>断后标距<br>mm',
-              field: 'max_n_after_bre',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            },{
-              title: '最大力<br>总延伸率<br>%',
-              field: 'agt',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            },{
-              title: '强屈比',
-              field: 'rm0_rel0',
-              colspan: 1,
-              align: 'center',
-              valign: 'middle'
-            }, {
-              title: '屈屈比',
-              field: 'rel0_rel',
               colspan: 1,
               align: 'center',
               valign: 'middle'
@@ -269,12 +184,6 @@
               field: 'rel0_rel',
               colspan: 1,
               align: 'center'
-            }, {
-              field: 'operate',
-              title: '分配有误',
-              align: 'center',
-              clickToSelect: false,
-              formatter: operateFormatter
             }
           ]
         })
@@ -354,13 +263,13 @@
             data: {},
             success: function(data){
                     data = jQuery.parseJSON(data);
-                    console.log(data);
+                    {# console.log(data); #}
                     jQuery.getScript(
                         "http://pv.sohu.com/cityjson?ie=utf-8",function(){
                         //localIP = returnCitySN["cip"];
                         console.log(returnCitySN);
                         for (var i = 0; i < data.length; i++){
-                            console.log(data[i]);
+                            {# console.log(data[i]); #}
                             if(data[i]['ip'] == returnCitySN['cip']){
                                 $("#machine_id").append(data[i]['machine_id']);
                                 $(".machine_id").attr('value', data[i]['machine_id']);

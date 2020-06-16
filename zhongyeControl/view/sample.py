@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from ..aggregate import *
 from copy import deepcopy
+import time
 
 
 @csrf_exempt  # 增加装饰器，作用是跳过 csrf 中间件的保护
@@ -240,8 +241,8 @@ def samIndexData(request):
         else:
             data["company_name"] = "请点击选择公司名称"
         # data["date"] = data["date"].strftime("%Y-%m-%d %H:%M:%S")
-        if data["date"] != None:
-            data["date"] = data["date"].strftime("%Y-%m-%d %H:%M:%S")
+        # if data["date"] != None:
+        #     data["date"] = data["date"].strftime("%Y-%m-%d %H:%M:%S")
         # print(data)
         rows.append(data)
     total = CommissionSheet.objects.count()
@@ -259,6 +260,8 @@ def updateCommissionSheet(request):
             # data["project_name"] = ""
             com = CommissionSheet()
             # CommissionSheet.objects.create(**{})
+            com.save()
+            com.report_id = "建钢检字"+time.strftime("%Y", time.localtime())+"RX第0"+str(com.id)+'号'
             com.save()
             HttpResponse(request, "<script>alert('添加成功！')</script>")
         else:
