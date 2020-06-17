@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'sample_index/updateSample/$', sample.updateSample, name="updateSample"),
     url(r'sample_index/loadSampleData/$', sample.loadSampleData, name="loadSampleData"),
     url(r'sample_index/updateCommissionSheet/$', sample.updateCommissionSheet, name="updateConsignment"),
+    url(r'sample_index/loadCommissionSheet/$', sample.loadCommissionSheet, name="loadCommissionSheet"),
     url(r'sample_index/updateCommissionSheetReport/$', sample.updateCommissionSheetReport, name="updateCommissionSheetReport"),
     url(r'consignmentData/$', sample.consignmentData, name="consignmentData"),
     url(r'zhongye/experiment/$', sample.experiment, name="experiment"),

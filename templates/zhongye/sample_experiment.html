@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   {#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/sample/css/bootstrap4.1.0.min.css">
   {#  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">#}
   <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
   <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
@@ -53,7 +53,7 @@
 </div>
 
 <script src="{% static 'base/js/jquery.min.js' %}"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.js"></script>
+<script src="/static/sample/js/bootstrap4.1.0.bundle.js"></script>
 <script src="{% static 'base/js/layer.js' %}"></script>
 <script src="{% static 'base/js/popper.min.js' %}"></script>
 {#<script src="{% static 'base/js/bootstrap-editable.js' %}"></script>#}
@@ -68,9 +68,9 @@
 
   var $table = $('#table')
   var columns = [
-  {#  field: "id",#}
-  {#  title: "id",#}
-  {#  visible: false#}
+    {#  field: "id",#}
+    {#  title: "id",#}
+    {#  visible: false#}
     {
       field: "sample_id",
       title: "规格",
@@ -200,6 +200,14 @@
           return "<input  type ='checkbox' id = '" + row.sample_id + "' name='ceq' onclick='change(this)'>"
         }
       }
+    }, {
+      title: "操作",
+      field: 'statue',
+      align: "center",
+      valign: "middle",
+      formatter: function (value, row, index) {
+        return "<input type='button' class='btn btn-primary btn-sm' id = '" + row.sample_id + "' name='statue' onclick='submit(this)' value='提交'>"
+      }
     }
   ]
 
@@ -221,25 +229,41 @@
     })
   }
 
+  function submit(that) {
+    {#layer.alert(that.checked)#}
+    layer.confirm("提交以后就不能修改了，确认提交吗？", {btn: ["确定", "取消"], title: "提交",btnAlign:"c"}, function (index) {
+      var data = {}
+      data["sample_id"] = that.id;
+      data['statue'] = 1
+      $.ajax({
+        data: data,
+        url: "/sample_index/updateSample/",
+        type: "POST",
+        success: function () {
+          layer.close(index)
+          initTable();
+        },
+        error: function () {
+        }
+      })
+    })
+  }
+
   function initTable() {
     $table.bootstrapTable("destroy").bootstrapTable({
       columns: columns,
-
-      url: "/sample_index/loadSampleData/?sheet_id=" + getQueryString("sheet_id")+"&laiyang_id="+getQueryString("laiyang_id"),
+      url: "/sample_index/loadSampleData/?sheet_id=" + getQueryString("sheet_id") + "&laiyang_id=" + getQueryString("laiyang_id"),
       method: "GET",
     })
   }
 
 
-
   $(function () {
     {#buildTable($table, 8, 2)#}
-    console.log(getQueryString("sheet_id"),getQueryString("laiyang_id"))
+    console.log(getQueryString("sheet_id"), getQueryString("laiyang_id"))
     initTable()
 
   })
-
-
 
 
 </script>

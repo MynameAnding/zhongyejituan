@@ -31,37 +31,53 @@
   </style>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#"></a>
-    </div>
-  </div>
-</nav>
+{#<div class="wrapper">#}
+{#  <div class="row">#}
+{#    <form class="search_header">#}
+{#      <div class="buttons">#}
+{#        <select class="selectpicker" data-width="auto" name="activity_type">#}
+{#          <option value="">活动类型</option>#}
+{#          <option value="1">生活活动</option>#}
+{#          <option value="2">区域活动</option>#}
+{#          <option value="3">集体活动</option>#}
+{#          <option value="4">家园共育</option>#}
+{#          <option value="5">户外活动</option>#}
+{#        </select>#}
+{#        <select class="selectpicker" data-width="auto" name="activity_tag">#}
+{#          <option value="">活动标签</option>#}
+{#          <option value="1">必选</option>#}
+{#          <option value="2">可选</option>#}
+{#        </select>#}
+{#      </div>#}
+{#    </form>#}
+{#  </div>#}
+{#</div>#}
+
 
 <div class="container">
   <form class="form-row" role="form">
     <div class="col-lg-4 form-inline">
       <label for="sample_name">样品名称：</label>
-      <select class="selectpicker form-control" id="sample_name" data-container="body" title="{{ data.sample_name }}"
+      <select class="selectpicker form-control"  name="sample_name"
+              id="sample_name" data-container="body"
               data-hide-disabled="true">
         <option value="热轧光圆钢筋">热轧光圆钢筋</option>
         <option value="热轧带肋钢筋">热轧带肋钢筋</option>
       </select>
     </div>
     <div class="col-lg-4 form-inline">
-      <label for="sample_statue">样品状态：</label>
-      <select class="selectpicker form-control" id="sample_statue" data-container="body"
-              title="{{ data.sample_statue }}" data-hide-disabled="true">
+      <label for="sample_state">样品状态：</label>
+      <select class="selectpicker form-control" name="sample_state"
+              id="sample_state" data-container="body"
+              data-hide-disabled="true">
         <option value="正常">正常</option>
         <option value="异常">异常</option>
       </select>
     </div>
     <div class="col-lg-4 form-inline">
       <label for="test_basis">检验依据：</label>
-      <input type="text" name="test_basis" id="test_basis" class="form-control" value="{{ data.test_basis }}">
+      <input readonly id="test_basis" class="form-control">
     </div>
-
   </form>
 </div>
 
@@ -101,11 +117,10 @@
 
 <script>
 
-
   var $table = $('#table')
   var columns = [{
     field: "sheet_id",
-    title:"sheet_id",
+    title: "sheet_id",
     visible: false
   }, {
     field: "sample_id",
@@ -113,10 +128,10 @@
     visible: false
   },
     {
-    field: "sample_actual_id",
+      field: "sample_actual_id",
       title: "sample_ac",
-    visible: false
-  },
+      visible: false
+    },
     {
       field: "d",
       title: "规格",
@@ -124,8 +139,8 @@
       valign: "middle",
       editable: {
         type: "select",
-        source: [{value: "6mm", text: "6mm"}, {value: "8mm", text: "8mm"}]
-      }
+        source: [{value: "---", text: "---"}, {value: "6mm", text: "6mm"}, {value: "8mm", text: "8mm"}],
+      },
     }, {
       field: "brand_grade",
       title: "牌号级别",
@@ -133,11 +148,10 @@
       valign: "middle",
       editable: {
         type: "select",
-        source: [{value: "HPB300", text: "HPB300"}, {value: "HPB400", text: "HPB400"}, {
-          value: "HPB400E",
-          text: "HPB400E"
+        source: [{value: "---", text: "---"}, {value: "HPB300", text: "HPB300"}, {value: "HPB400", text: "HPB400"}, {
+          value: "HPB400E", text: "HPB400E"
         }]
-      }
+      },
     }, {
       field: "laiyang_id",
       title: "来样编号",
@@ -145,7 +159,8 @@
       valign: "middle",
       editable: {
         type: "text",
-      }
+      },
+
     }, {
       field: "sample_number",
       title: "数量",
@@ -153,21 +168,38 @@
       valign: "middle",
       editable: {
         type: "text",
-      }
+        validate: function (value) {
+          if (!isNaN(value)) {
+            if (value > 10 || value < 1) {
+              return '请输入合理的数字！';
+            }
+          } else {
+            return "请输入数字！";
+          }
+        },
+      },
     }, {
       field: "product_number",
       title: "产品批号",
       align: "center",
       valign: "middle",
+      formatter: function (value, row, index) {
+        return value
+      },
       editable: {
-        type: "text"
-      }
+        type: "text",
+        disabled: false,
+      },
     }, {
       title: '操作',
       align: 'center',
       print: false,
       valign: "middle",
       formatter: operateFormatter
+    }
+    , {
+      field: 'status',
+      visible: false
     }
   ]
 
@@ -178,22 +210,27 @@
       method: "get",
       pageSize: 6,
       onEditableSave: function (field, row, oldValue, $el) {
-        var data = {"sample_id": row.sample_id,};
-        data[field] = row[field]
-        $.ajax({
-          type: "POST",
-          url: "/sample_index/updateSample/",
-          data: data,
-          success: function (status) {
-            initTable();
-          },
-          error: function () {
-            initTable();
-            alert('编辑失败');
-          },
-          complete: function () {
-          }
-        });
+        if (oldValue == '---' || oldValue == '0') {
+          var data = {"sample_id": row.sample_id,};
+          data[field] = row[field]
+          $.ajax({
+            type: "POST",
+            url: "/sample_index/updateSample/",
+            data: data,
+            success: function (status) {
+              initTable();
+            },
+            error: function () {
+              initTable();
+              alert('编辑失败');
+            },
+            complete: function () {
+            }
+          });
+        } else {
+          layer.alert("对不起您没有权限不能修改！")
+          initTable()
+        }
       }
     })
   }
@@ -202,24 +239,51 @@
     {#console.log(row.sample_actual_id)#}
     if (row.sample_actual_id != null) {
       return [
-        '<input type="button" onclick="experiment(',row.sheet_id,',',row.laiyang_id,
+        '<input type="button" onclick="experiment(', row.sheet_id, ',', row.laiyang_id,
         ')" class="btn btn-primary btn-sm" value="试验安排">'
         {#'<input type="button" onclick="sample(',row,')" class="btn btn-info btn-sm" value="生成编号">'#}
       ].join('')
     } else {
       return [
-        '<input type="button" onclick="sample(',row.sample_id,')" class="btn btn-info btn-sm" value="生成编号">'
+        '<input type="button" onclick="sample(',
+        row.sample_id, ",",
+        "'", row.laiyang_id, "',",
+        "'", row.sample_number, "',",
+        "'", row.product_number, "',",
+        "'", row.d, "',",
+        "'", row.brand_grade, "',",
+        ')" class="btn btn-info btn-sm" value="生成编号">'
         {#'<input type="button" onclick="sample(',row,')" class="btn btn-info btn-sm" value="生成编号">'#}
       ].join('')
     }
 
   }
 
-  function sample(sample_id) {
+  function sample(sample_id, laiyang_id, sample_number, product_number, d, brand_grade) {
 
-    console.log(sample_id)
+    {#console.log(sample_id)#}
+    if (laiyang_id == "---") {
+      layer.alert("请输入来样编号！")
+      return
+    }
+    if (sample_number == "0") {
+      layer.alert("请输入数量！")
+      return
+    }
+    if (product_number == "---") {
+      layer.alert("请输入产品批号！")
+      return
+    }
+    if (d == "---") {
+      layer.alert("请选择规格！")
+      return
+    }
+    if (brand_grade == "---") {
+      layer.alert("请选择牌号级别！")
+      return
+    }
     $.ajax({
-      data: {"sample_id":sample_id},
+      data: {"sample_id": sample_id},
       url: "/sample_index/createSample/",
       type: "POST",
       success: function (result) {
@@ -233,13 +297,13 @@
     })
   }
 
-  function experiment(sheet_id,laiyang_id) {
+  function experiment(sheet_id, laiyang_id) {
     layer.open({
       type: 2,
       area: ['70%', '600px'],
       fixed: false, //不固定
       maxmin: true,
-      content: '/sample_index/sample_experiment/?sheet_id=' + sheet_id+"&laiyang_id="+laiyang_id,
+      content: '/sample_index/sample_experiment/?sheet_id=' + sheet_id + "&laiyang_id=" + laiyang_id,
     });
   }
 
@@ -259,9 +323,59 @@
     })
   })
 
-  $(function () {
+  function load() {
+    var data = {}
+    data['id'] = getQueryString("sheet_id")
+    $.ajax({
+      type: "POST",
+      url: "/sample_index/loadCommissionSheet/",
+      data: data,
+      success: function (result) {
 
+        result = JSON.parse(result)
+        console.log(result.sample_name,result.test_basis,result.sample_state)
+        {#console.log(result.sample_name,result.sample_state,result.test_basis)#}
+        $("#sample_name").selectpicker("val",result["sample_name"])
+        $("#sample_state").selectpicker("val",result["sample_state"])
+        $("#test_basis").val(result["test_basis"]);
+      },
+      error: function () {
+
+      },
+      complete: function () {
+      }
+    });
+
+  }
+
+  $(function () {
+    load()
     initTable()
+
+
+    $('.selectpicker').selectpicker().on('changed.bs.select', function (e) {
+      var data = {};
+      if (this.id == "sample_name") {
+        data["test_basis"] = this.value == "热轧光圆钢筋" ? "GB/T 1499.1 " : "GB/T 1499.2"
+        $("#test_basis").val(data["test_basis"])
+      }
+      data[this.id] = this.value
+      data['id'] = getQueryString('sheet_id')
+      $.ajax({
+        type: "POST",
+        url: "/sample_index/updateCommissionSheet/",
+        data: data,
+        success: function (status) {
+          initTable();
+        },
+        error: function () {
+          initTable();
+          alert('编辑失败');
+        },
+        complete: function () {
+        }
+      });
+    });
 
   })
 

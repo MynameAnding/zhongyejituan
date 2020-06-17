@@ -72,17 +72,16 @@
             field: 'report_id',
             align: 'center',
             valign: 'middle',
-            editable: {
-              type: "text",
-              title: "委托编号",
-              placeholder: '委托编号',
-              validate: function (value) {
-                if (!value) {
-                  return '委托编号不能为空';
-                }
-              },
-
-            }
+            {#editable: {#}
+            {#  type: "text",#}
+            {#  title: "委托编号",#}
+            {#  placeholder: '委托编号',#}
+            {#  validate: function (value) {#}
+            {#    if (!value) {#}
+            {#      return '委托编号不能为空';#}
+            {#    }#}
+            {#  },#}
+            {##}
             {#sortable: true,#}
           }, {
             title: '委托单位',

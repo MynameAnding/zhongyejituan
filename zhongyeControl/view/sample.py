@@ -60,12 +60,11 @@ def loadSampleData(request):
     sheet_id = para["sheet_id"]
     if 'laiyang_id' in para.keys():
         laiyang_id = para["laiyang_id"]
-        sql = "select sample_id,sample_actual_id,sheet_id,sample_number,d,brand_grade,product_number from sample where sheet_id ="+sheet_id+" and  laiyang_id = "+laiyang_id+" order by sample_id"
+        sql = "select sample_id,sample_actual_id,sheet_id,sample_number,d,brand_grade,product_number from sample where sheet_id ="+sheet_id+" and  laiyang_id = "+laiyang_id+" and  status = 0"+" order by sample_id"
     else:
-        sql = "select sample_id,sample_actual_id,sheet_id,sample_number,d,brand_grade,product_number from sample where sheet_id ="+sheet_id+" group by laiyang_id order by sample_id"
+        sql = "select sample_id,sample_actual_id,sheet_id,sample_number,d,brand_grade,product_number from sample where sheet_id ="+sheet_id+" and  status = 0"+" group by laiyang_id order by sample_id"
     datas = Sample.objects.raw(sql)
     datas = json.loads(serializers.serialize("json", datas))
-
     rows = []
     for data in datas:
         result = {}
@@ -118,8 +117,11 @@ def sample_experiment(request):
 def updateSample(request):
     data = request.POST.copy().dict()
     data.pop('csrfmiddlewaretoken') if "csrfmiddlewaretoken" in data.keys() else data
-    Sample.objects.update_or_create(sample_id=request.POST.get("sample_id"), defaults=data)
-    result = {"statue": 200}
+    obj,create = Sample.objects.update_or_create(sample_id=request.POST.get("sample_id"), defaults=data)
+    if not create:
+        if obj.lashen == 1:
+            Tension(sample_id=obj.sample_id).save()
+    result = {"status": 200}
     return HttpResponse(json.dumps(result))
 
 
@@ -142,7 +144,7 @@ def createSample(request):
                 data.save()
     else:
         Sample(sheet_id=data['sheet_id']).save()
-    result = {"statue": 200}
+    result = {"status": 200}
     return HttpResponse(json.dumps(result))
 
 
@@ -211,7 +213,7 @@ def updateCompany(request):
         data.pop('csrfmiddlewaretoken') if "csrfmiddlewaretoken" in data.keys() else data
         CommissionCompany.objects.update_or_create(id=request.POST.get("id"), defaults=data)
         # return render(request, 'zhongye/companyAdmin.html',{"reoprt_id":report_id})
-        result = {"statue": 200}
+        result = {"status": 200}
         return HttpResponse(json.dumps(result))
 
 
@@ -269,6 +271,21 @@ def updateCommissionSheet(request):
             id = data.pop('id')
             CommissionSheet.objects.filter(id=id).update(**data)
     return HttpResponseRedirect("/sample_index/")
+
+@csrf_exempt
+@CheckAuthShouyang
+def loadCommissionSheet(request):
+
+    # print(request.POST.copy().dict())
+    data = CommissionSheet.objects.filter(id=int(request.POST.get("id"))).first()
+    # print(data)
+    result = {}
+    result['sample_name'] = data.sample_name
+    result["sample_state"] = data.sample_state
+    result['test_basis'] = data.test_basis
+    # data = json.loads(serializers.serialize("json", data))
+    # print(result)
+    return HttpResponse(json.dumps(result))
 
 
 @csrf_exempt

@@ -213,11 +213,11 @@ class Sample(models.Model):
     sample_id = models.AutoField(primary_key=True)
     sample_actual_id = models.CharField(max_length=255, blank=True, null=True)
     sheet_id = models.IntegerField(blank=True, null=True)
-    brand_grade = models.CharField(max_length=255, blank=True, null=True)
-    d = models.CharField(max_length=255, blank=True, null=True)
-    sample_number = models.IntegerField(blank=True, null=True)
-    product_number = models.CharField(max_length=255, blank=True, null=True)
-    laiyang_id = models.CharField(max_length=255, blank=True, null=True)
+    brand_grade = models.CharField(max_length=255, blank=True, null=True,default="---")
+    d = models.CharField(max_length=255, blank=True, null=True,default='---')
+    sample_number = models.IntegerField(blank=True, null=True,default=0)
+    product_number = models.CharField(max_length=255, blank=True, null=True,default="---")
+    laiyang_id = models.CharField(max_length=255, blank=True, null=True,default="---")
     lashen = models.IntegerField(blank=True, null=True)
     wanqu = models.IntegerField(blank=True, null=True)
     fanwan = models.IntegerField(blank=True, null=True)
@@ -228,6 +228,7 @@ class Sample(models.Model):
     zhonglaingpiancha = models.IntegerField(blank=True, null=True)
     biaomianzhiliang = models.IntegerField(blank=True, null=True)
     ceq = models.IntegerField(blank=True, null=True)
+    status = models.IntegerField(blank=True, null=True ,default=0)
 
     class Meta:
         managed = False
